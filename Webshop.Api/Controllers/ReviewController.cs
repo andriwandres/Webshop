@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
@@ -11,6 +12,8 @@ using Webshop.Api.Models.Domain;
 using Webshop.Api.Models.Dto.Review;
 using Webshop.Api.Models.ViewModel.Review;
 using Webshop.Api.Services;
+using Webshop.Api.SignalR.Events;
+using Webshop.Api.SignalR.Hubs;
 
 namespace Webshop.Api.Controllers
 {
@@ -22,11 +25,13 @@ namespace Webshop.Api.Controllers
         private readonly IMapper _mapper;
         private readonly WebshopContext _context;
         private readonly AuthService _authService;
+        private readonly IHubContext<WebshopHub> _hubContext;
 
-        public ReviewController(IMapper mapper, WebshopContext context, AuthService authService)
+        public ReviewController(IMapper mapper, WebshopContext context, AuthService authService, IHubContext<WebshopHub> hubContext)
         {
             _mapper = mapper;
             _context = context;
+            _hubContext = hubContext;
             _authService = authService;
         }
 
@@ -142,6 +147,8 @@ namespace Webshop.Api.Controllers
 
             ReviewViewModel viewModel = _mapper.Map<Review, ReviewViewModel>(review);
 
+            await _hubContext.Clients.All.SendAsync(SignalREvents.EditReview, viewModel, cancellationToken);
+
             return Ok(viewModel);
         }
 
@@ -187,6 +194,8 @@ namespace Webshop.Api.Controllers
 
             _context.Reviews.Remove(review);
             await _context.SaveChangesAsync(cancellationToken);
+
+            await _hubContext.Clients.All.SendAsync(SignalREvents.DeleteReview, id, cancellationToken);
 
             return NoContent();
         }

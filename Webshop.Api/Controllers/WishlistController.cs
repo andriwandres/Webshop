@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ using Webshop.Api.Models.Domain;
 using Webshop.Api.Models.ViewModel.Product;
 using Webshop.Api.Models.ViewModel.Wishlist;
 using Webshop.Api.Services;
+using Webshop.Api.SignalR.Events;
+using Webshop.Api.SignalR.Hubs;
 
 namespace Webshop.Api.Controllers
 {
@@ -25,12 +28,14 @@ namespace Webshop.Api.Controllers
         private readonly IMapper _mapper;
         private readonly WebshopContext _context;
         private readonly AuthService _authService;
+        private readonly IHubContext<WebshopHub> _hubContext;
 
-        public WishlistController(WebshopContext context, AuthService authService, IMapper mapper)
+        public WishlistController(WebshopContext context, AuthService authService, IMapper mapper, IHubContext<WebshopHub> hubContext)
         {
             _mapper = mapper;
             _context = context;
             _authService = authService;
+            _hubContext = hubContext;
         }
 
         /// <summary>

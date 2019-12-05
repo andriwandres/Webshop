@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ using Webshop.Api.Models.Domain;
 using Webshop.Api.Models.Dto.Order;
 using Webshop.Api.Models.ViewModel.Order;
 using Webshop.Api.Services;
+using Webshop.Api.SignalR.Events;
+using Webshop.Api.SignalR.Hubs;
 
 namespace Webshop.Api.Controllers
 {
@@ -25,11 +28,13 @@ namespace Webshop.Api.Controllers
         private readonly IMapper _mapper;
         private readonly WebshopContext _context;
         private readonly AuthService _authService;
+        private readonly IHubContext<WebshopHub> _hubContext;
 
-        public OrderController(IMapper mapper, WebshopContext context, AuthService authService)
+        public OrderController(IMapper mapper, WebshopContext context, AuthService authService, IHubContext<WebshopHub> hubContext)
         {
             _mapper = mapper;
             _context = context;
+            _hubContext = hubContext;
             _authService = authService;
         }
 
@@ -48,7 +53,7 @@ namespace Webshop.Api.Controllers
         public async Task<ActionResult<IEnumerable<OrderViewModel>>> GetOrders(CancellationToken cancellationToken)
         {
             AppUser user = await _authService.GetUser(User, cancellationToken);
-
+            
             IEnumerable<OrderViewModel> orders = _context.Orders
                 .AsNoTracking()
                 .Include(o => o.Product)
@@ -112,6 +117,8 @@ namespace Webshop.Api.Controllers
             await _context.SaveChangesAsync(cancellationToken);
 
             OrderViewModel viewModel = _mapper.Map<Order, OrderViewModel>(order);
+
+            await _hubContext.Clients.All.SendAsync(SignalREvents.PlaceOrder, model, cancellationToken);
 
             return Created(nameof(PlaceOrder), viewModel);
         }
