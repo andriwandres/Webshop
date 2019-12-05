@@ -43,7 +43,8 @@ namespace Webshop.Api.Services
                 return null;
             }
 
-            return await _context.Users.FirstAsync(u => u.UserId == int.Parse(id));
+            return await _context.Users
+                .FirstAsync(u => u.UserId == int.Parse(id));
         }
 
         public async Task Register(RegisterDto model, CancellationToken cancellationToken = default)

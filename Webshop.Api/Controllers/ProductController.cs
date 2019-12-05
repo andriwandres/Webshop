@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,13 +19,15 @@ namespace Webshop.Api.Controllers
     [Produces("application/json")]
     public class ProductController : ControllerBase
     {
+        private readonly IMapper _mapper;
+        private readonly WebshopContext _context;
         private readonly AuthService _authService;
-        private readonly ProductService _productService;
 
-        public ProductController(ProductService productService, AuthService authService, WebshopContext context)
+        public ProductController(IMapper mapper, AuthService authService, WebshopContext context)
         {
+            _mapper = mapper;
+            _context = context;
             _authService = authService;
-            _productService = productService;
         }
 
         /// <summary>
@@ -34,12 +39,18 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     List of products
         /// </returns>
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet("GetProducts")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<ProductListingViewModel>>> GetProducts(CancellationToken cancellationToken)
         {
-            IEnumerable<ProductListingViewModel> products = await _productService.GetProducts(cancellationToken);
+            IEnumerable<ProductListingViewModel> products = await _context.Products
+                .AsNoTracking()
+                .Include(p => p.Images)
+                .Include(p => p.Reviews)
+                .Include(p => p.WishlistItems)
+                .ProjectTo<ProductListingViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
 
             return Ok(products);
         }
@@ -56,21 +67,26 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     Single product by its ID
         /// </returns>
-        [Authorize]
-        [HttpGet("GetProductById/{productId:int}")]
+        [AllowAnonymous]
+        [HttpGet("GetProductDetails/{productId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ProductDetailViewModel>> GetProductById([FromRoute] int productId, CancellationToken cancellationToken)
+        public async Task<ActionResult<ProductDetailViewModel>> GetProductsDetails([FromRoute] int productId, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            AppUser user = await _authService.GetUser(User, cancellationToken);
+            Product productDomain = await _context.Products
+                .AsNoTracking()
+                .Include(p => p.Images)
+                .Include(p => p.WishlistItems)
+                .Include(p => p.Reviews).ThenInclude(r => r.User)
+                .FirstOrDefaultAsync(p => p.ProductId == productId, cancellationToken);
 
-            ProductDetailViewModel product = await _productService.GetProductById(productId, user.UserId, cancellationToken);
+            ProductDetailViewModel product = _mapper.Map<Product, ProductDetailViewModel>(productDomain);
 
             if (product is null)
             {

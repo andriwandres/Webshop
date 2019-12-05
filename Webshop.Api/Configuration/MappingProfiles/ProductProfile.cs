@@ -25,13 +25,6 @@ namespace Webshop.Api.Configuration.MappingProfiles
                 });
 
             CreateMap<Product, ProductDetailViewModel>()
-                .ForMember(vm => vm.IsOnWishlist, config =>
-                {
-                    config.MapFrom((p, vm, member, context) =>
-                    {
-                        return p.WishlistItems.Any(we => we.UserId == (int)context.Items["UserId"]);
-                    });
-                })
                 .ForMember(vm => vm.Images, config =>
                 {
                     config.MapFrom(p => p.Images.Select(i => new ProductImageViewModel

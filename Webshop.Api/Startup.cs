@@ -133,7 +133,6 @@ namespace Webshop.Api
             // Add Custom Services
             services.AddScoped<CryptoService>();
             services.AddScoped<AuthService>();
-            services.AddScoped<ProductService>();
 
             // Add Cross-Origin-Resource-Sharing
             services.AddCors();
