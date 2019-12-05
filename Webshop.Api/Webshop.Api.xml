@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Webshop.Api</name>
+    </assembly>
+    <members>
+        <member name="M:Webshop.Api.Controllers.AuthController.IsEmailTaken(System.String,System.Threading.CancellationToken)">
+            <summary>
+                Checks whether an email address is already used by another user in the database
+            </summary>
+            <param name="email">
+                Email to be checked against the database
+            </param>
+            <param name="cancellationToken">
+                Token for cancelling the request. This token is provided by the framework itself
+            </param>
+            <returns>
+                Whether the email address is taken or not
+            </returns>
+        </member>
+        <member name="M:Webshop.Api.Controllers.AuthController.Register(Webshop.Api.Models.Dto.User.RegisterDto,System.Threading.CancellationToken)">
+            <summary>
+                Creates a new application user in the database
+            </summary>
+            <param name="model">
+                User information for registration
+            </param>
+            <param name="cancellationToken">
+                Token for cancelling the request. This token is provided by the framework itself
+            </param>
+            <returns>
+                No content
+            </returns>
+        </member>
+        <member name="M:Webshop.Api.Controllers.AuthController.Login(Webshop.Api.Models.Dto.User.LoginDto,System.Threading.CancellationToken)">
+            <summary>
+                Checks a users credentials against the database and returns user information alongside a jwt token.
+            </summary>
+            <param name="model">
+                Login credentials
+            </param>
+            <param name="cancellationToken">
+                Token for cancelling the request. This token is provided by the framework itself
+            </param>
+            <returns>
+                User information + Valid JWT Token
+            </returns>
+        </member>
+        <member name="M:Webshop.Api.Controllers.ProductController.GetProducts(System.Threading.CancellationToken)">
+            <summary>
+                Returns a list of products
+            </summary>
+            <param name="cancellationToken">
+                Token for cancelling the request. This token is provided by the framework itself
+            </param>
+            <returns>
+                List of products
+            </returns>
+        </member>
+        <member name="M:Webshop.Api.Controllers.ProductController.GetProductById(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+                Returns a single product by its ID number
+            </summary>
+            <param name="productId">
+                ID number of product to get
+            </param>
+            <param name="cancellationToken">
+                Token for cancelling the request. This token is provided by the framework itself
+            </param>
+            <returns>
+                Single product by its ID
+            </returns>
+        </member>
+    </members>
+</doc>
