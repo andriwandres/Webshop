@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Webshop.Api.Database;
 using Webshop.Api.Models.Domain;
 using Webshop.Api.Models.ViewModel.Product;
-using Webshop.Api.Services;
 
 namespace Webshop.Api.Controllers
 {
@@ -21,13 +20,11 @@ namespace Webshop.Api.Controllers
     {
         private readonly IMapper _mapper;
         private readonly WebshopContext _context;
-        private readonly AuthService _authService;
 
-        public ProductController(IMapper mapper, AuthService authService, WebshopContext context)
+        public ProductController(IMapper mapper, WebshopContext context)
         {
             _mapper = mapper;
             _context = context;
-            _authService = authService;
         }
 
         /// <summary>

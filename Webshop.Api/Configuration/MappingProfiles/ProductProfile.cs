@@ -25,6 +25,10 @@ namespace Webshop.Api.Configuration.MappingProfiles
                 });
 
             CreateMap<Product, ProductDetailViewModel>()
+                .ForMember(vm => vm.AverageStars, config =>
+                {
+                    config.MapFrom(p => p.Reviews.Average(r => r.Stars));
+                })
                 .ForMember(vm => vm.Images, config =>
                 {
                     config.MapFrom(p => p.Images.Select(i => new ProductImageViewModel

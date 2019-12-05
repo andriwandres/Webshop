@@ -96,6 +96,54 @@
                 Single product by its ID
             </returns>
         </member>
+        <member name="M:Webshop.Api.Controllers.ReviewController.CreateReview(System.Int32,Webshop.Api.Models.Dto.Review.ReviewDto,System.Threading.CancellationToken)">
+            <summary>
+                Creates a review to a product in the database
+            </summary>
+            <param name="productId">
+                ID number of product to review
+            </param>
+            <param name="model">
+                Information about the review
+            </param>
+            <param name="cancellationToken">
+                Token for cancelling the request. This token is provided by the framework itself
+            </param>
+            <returns>
+                Created review
+            </returns>
+        </member>
+        <member name="M:Webshop.Api.Controllers.ReviewController.EditReview(System.Int32,Webshop.Api.Models.Dto.Review.ReviewDto,System.Threading.CancellationToken)">
+            <summary>
+                Edits an existing review to a product
+            </summary>
+            <param name="id">
+                ID number of review to edit
+            </param>
+            <param name="model">
+                Information about the updated review
+            </param>
+            <param name="cancellationToken">
+                Token for cancelling the request. This token is provided by the framework itself
+            </param>
+            <returns>
+                The updated reviews
+            </returns>
+        </member>
+        <member name="M:Webshop.Api.Controllers.ReviewController.DeleteReview(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+                Deletes a review to a product
+            </summary>
+            <param name="id">
+                ID number of review to delete
+            </param>
+            <param name="cancellationToken">
+                Token for cancelling the request. This token is provided by the framework itself
+            </param>
+            <returns>
+                No content
+            </returns>
+        </member>
         <member name="M:Webshop.Api.Controllers.WishlistController.GetWishlist(System.Threading.CancellationToken)">
             <summary>
                 Returns a list of products on a users wishlist
