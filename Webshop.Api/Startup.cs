@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -125,14 +126,20 @@ namespace Webshop.Api
                     }
                 });
 
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
             });
 
             // Add Custom Services
             services.AddScoped<CryptoService>();
             services.AddScoped<AuthService>();
+            services.AddScoped<ProductService>();
+            services.AddScoped<OrderService>();
+            services.AddScoped<ReviewService>();
+            services.AddScoped<WishlistService>();
+
+            services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
 
             // Add Cross-Origin-Resource-Sharing
             services.AddCors();

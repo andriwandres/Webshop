@@ -1,22 +1,11 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Webshop.Api.Database;
-using Webshop.Api.Models.Domain;
-using Webshop.Api.Models.ViewModel.Product;
 using Webshop.Api.Models.ViewModel.Wishlist;
 using Webshop.Api.Services;
-using Webshop.Api.SignalR.Events;
-using Webshop.Api.SignalR.Hubs;
 
 namespace Webshop.Api.Controllers
 {
@@ -25,17 +14,13 @@ namespace Webshop.Api.Controllers
     [Produces("application/json")]
     public class WishlistController : ControllerBase
     {
-        private readonly IMapper _mapper;
-        private readonly WebshopContext _context;
-        private readonly AuthService _authService;
-        private readonly IHubContext<WebshopHub> _hubContext;
+        private readonly ProductService _productService;
+        private readonly WishlistService _wishlistService;
 
-        public WishlistController(WebshopContext context, AuthService authService, IMapper mapper, IHubContext<WebshopHub> hubContext)
+        public WishlistController(WishlistService wishlistService, ProductService productService)
         {
-            _mapper = mapper;
-            _context = context;
-            _authService = authService;
-            _hubContext = hubContext;
+            _productService = productService;
+            _wishlistService = wishlistService;
         }
 
         /// <summary>
@@ -52,14 +37,7 @@ namespace Webshop.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<WishlistItemViewModel>>> GetWishlist(CancellationToken cancellationToken)
         {
-            AppUser user = await _authService.GetUser(User, cancellationToken);
-
-            IEnumerable<WishlistItemViewModel> items = _context.WishlistItems
-                .AsNoTracking()
-                .Include(wi => wi.Product)
-                    .ThenInclude(p => p.Images)
-                .Where(wi => wi.UserId == user.UserId)
-                .ProjectTo<WishlistItemViewModel>(_mapper.ConfigurationProvider);
+            IEnumerable<WishlistItemViewModel> items = await _wishlistService.GetWishlist(cancellationToken);
             
             return Ok(items);
         }
@@ -78,7 +56,7 @@ namespace Webshop.Api.Controllers
         /// </returns>
         [Authorize]
         [HttpPost("AddWishlistItem/{productId:int}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<WishlistItemViewModel>> AddWishlistItem([FromRoute] int productId, CancellationToken cancellationToken)
@@ -88,30 +66,16 @@ namespace Webshop.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            Product product = await _context.Products
-                .AsNoTracking()
-                .Include(p => p.Images)
-                .SingleOrDefaultAsync(p => p.ProductId == productId, cancellationToken);
+            bool productExists = await _productService.ProductExists(productId, cancellationToken);
 
-            if (product is null)
+            if (!productExists)
             {
                 return NotFound();
             }
 
-            AppUser user = await _authService.GetUser(User);
+            WishlistItemViewModel viewModel = await _wishlistService.AddWishlistItem(productId, cancellationToken);
 
-            WishlistItem item = new WishlistItem
-            {
-                User = user,
-                Product = product,
-            };
-
-            await _context.WishlistItems.AddAsync(item, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            WishlistItemViewModel viewModel = _mapper.Map<WishlistItem, WishlistItemViewModel>(item);
-
-            return Created(nameof(AddWishlistItem), viewModel);
+            return Ok(viewModel);
         }
 
         /// <summary>
@@ -138,16 +102,14 @@ namespace Webshop.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            WishlistItem item = await _context.WishlistItems
-                .SingleOrDefaultAsync(wi => wi.WishlistItemId == id, cancellationToken);
+            bool itemExists = await _wishlistService.WishlistItemExists(id, cancellationToken);
 
-            if (item is null)
+            if (!itemExists)
             {
                 return NotFound();
             }
 
-            _context.Remove(item);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _wishlistService.RemoveWishlistItem(id, cancellationToken);
 
             return NoContent();
         }

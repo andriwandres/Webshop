@@ -1,15 +1,11 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Webshop.Api.Database;
-using Webshop.Api.Models.Domain;
 using Webshop.Api.Models.ViewModel.Product;
+using Webshop.Api.Services;
 
 namespace Webshop.Api.Controllers
 {
@@ -18,13 +14,12 @@ namespace Webshop.Api.Controllers
     [Produces("application/json")]
     public class ProductController : ControllerBase
     {
-        private readonly IMapper _mapper;
-        private readonly WebshopContext _context;
+        
+        private readonly ProductService _productService;
 
-        public ProductController(IMapper mapper, WebshopContext context)
+        public ProductController(ProductService productService)
         {
-            _mapper = mapper;
-            _context = context;
+            _productService = productService;
         }
 
         /// <summary>
@@ -41,13 +36,7 @@ namespace Webshop.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<ProductListingViewModel>>> GetProducts(CancellationToken cancellationToken)
         {
-            IEnumerable<ProductListingViewModel> products = await _context.Products
-                .AsNoTracking()
-                .Include(p => p.Images)
-                .Include(p => p.Reviews)
-                .Include(p => p.WishlistItems)
-                .ProjectTo<ProductListingViewModel>(_mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
+            IEnumerable<ProductListingViewModel> products = await _productService.GetProducts(cancellationToken);
 
             return Ok(products);
         }
@@ -76,19 +65,14 @@ namespace Webshop.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            Product productDomain = await _context.Products
-                .AsNoTracking()
-                .Include(p => p.Images)
-                .Include(p => p.WishlistItems)
-                .Include(p => p.Reviews).ThenInclude(r => r.User)
-                .FirstOrDefaultAsync(p => p.ProductId == productId, cancellationToken);
+            bool productExists = await _productService.ProductExists(productId, cancellationToken);
 
-            ProductDetailViewModel product = _mapper.Map<Product, ProductDetailViewModel>(productDomain);
-
-            if (product is null)
+            if (!productExists)
             {
                 return NotFound();
             }
+
+            ProductDetailViewModel product = await _productService.GetProductDetails(productId, cancellationToken);
 
             return Ok(product);
         }

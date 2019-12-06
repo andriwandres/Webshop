@@ -1,19 +1,11 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Webshop.Api.Database;
-using Webshop.Api.Models.Domain;
 using Webshop.Api.Models.Dto.Review;
 using Webshop.Api.Models.ViewModel.Review;
 using Webshop.Api.Services;
-using Webshop.Api.SignalR.Events;
-using Webshop.Api.SignalR.Hubs;
 
 namespace Webshop.Api.Controllers
 {
@@ -22,17 +14,13 @@ namespace Webshop.Api.Controllers
     [Produces("application/json")]
     public class ReviewController : ControllerBase
     {
-        private readonly IMapper _mapper;
-        private readonly WebshopContext _context;
-        private readonly AuthService _authService;
-        private readonly IHubContext<WebshopHub> _hubContext;
+        private readonly ProductService _productService;
+        private readonly ReviewService _reviewService;
 
-        public ReviewController(IMapper mapper, WebshopContext context, AuthService authService, IHubContext<WebshopHub> hubContext)
+        public ReviewController(ProductService productService, ReviewService reviewService)
         {
-            _mapper = mapper;
-            _context = context;
-            _hubContext = hubContext;
-            _authService = authService;
+            _reviewService = reviewService;
+            _productService = productService;
         }
 
         /// <summary>
@@ -52,7 +40,7 @@ namespace Webshop.Api.Controllers
         /// </returns>
         [Authorize]
         [HttpPost("CreateReview/{productId:int}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -63,38 +51,23 @@ namespace Webshop.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            Product product = await _context.Products
-                .SingleOrDefaultAsync(p => p.ProductId == productId, cancellationToken);
+            bool productExists = await _productService.ProductExists(productId, cancellationToken);
 
-            if (product is null)
+            if (!productExists)
             {
                 return NotFound();
             }
 
-            AppUser user = await _authService.GetUser(User, cancellationToken);
-
-            bool hasAlreadyReviewed = await _context.Reviews.AnyAsync(r => r.UserId == user.UserId && r.ProductId == product.ProductId);
+            bool hasAlreadyReviewed = await _reviewService.HasAlreadyReviewed(productId, cancellationToken);
 
             if (hasAlreadyReviewed)
             {
                 return Unauthorized();
             }
+            
+            ReviewViewModel review = await _reviewService.CreateReview(productId, model, cancellationToken);
 
-            Review review = new Review
-            {
-                User = user,
-                Product = product,
-                Body = model.Body,
-                Stars = model.Stars,
-                CreatedAt = DateTime.Now,
-            };
-
-            await _context.Reviews.AddAsync(review, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            ReviewViewModel viewModel = _mapper.Map<Review, ReviewViewModel>(review);
-
-            return Created(nameof(CreateReview), viewModel);
+            return Ok(review);
         }
 
         /// <summary>
@@ -114,7 +87,7 @@ namespace Webshop.Api.Controllers
         /// </returns>
         [Authorize]
         [HttpPut("EditReview/{id:int}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -125,31 +98,23 @@ namespace Webshop.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            Review review = await _context.Reviews
-                .SingleOrDefaultAsync(r => r.ReviewId == id);
+            bool reviewExists = await _reviewService.ReviewExists(id, cancellationToken);
 
-            if (review is null)
+            if (!reviewExists)
             {
                 return NotFound();
             }
 
-            AppUser user = await _authService.GetUser(User, cancellationToken);
+            bool isAuthor = await _reviewService.IsAuthor(id, cancellationToken);
 
-            if (review.UserId != user.UserId)
+            if (!isAuthor)
             {
                 return Unauthorized();
             }
 
-            review.Stars = model.Stars;
-            review.Body = model.Body;
+            await _reviewService.EditReview(id, model, cancellationToken);
 
-            await _context.SaveChangesAsync(cancellationToken);
-
-            ReviewViewModel viewModel = _mapper.Map<Review, ReviewViewModel>(review);
-
-            await _hubContext.Clients.All.SendAsync(SignalREvents.EditReview, viewModel, cancellationToken);
-
-            return Ok(viewModel);
+            return NoContent();
         }
 
         /// <summary>
@@ -177,25 +142,21 @@ namespace Webshop.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            Review review = await _context.Reviews
-                .SingleOrDefaultAsync(r => r.ReviewId == id);
+            bool reviewExists = await _reviewService.ReviewExists(id, cancellationToken);
 
-            if (review is null)
+            if (!reviewExists)
             {
                 return NotFound();
             }
 
-            AppUser user = await _authService.GetUser(User, cancellationToken);
+            bool isAuthor = await _reviewService.IsAuthor(id, cancellationToken);
 
-            if (review.UserId != user.UserId)
+            if (!isAuthor)
             {
                 return Unauthorized();
             }
 
-            _context.Reviews.Remove(review);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            await _hubContext.Clients.All.SendAsync(SignalREvents.DeleteReview, id, cancellationToken);
+            await _reviewService.DeleteReview(id, cancellationToken);
 
             return NoContent();
         }
