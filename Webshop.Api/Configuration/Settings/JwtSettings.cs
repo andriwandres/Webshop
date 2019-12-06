@@ -1,5 +1,5 @@
 ﻿
-namespace Webshop.Api.Configuration
+namespace Webshop.Api.Configuration.Settings
 {
     public class JwtSettings
     {

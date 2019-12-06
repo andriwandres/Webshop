@@ -3,14 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Webshop.Api.Configuration;
+using Webshop.Api.Configuration.Settings;
 using Webshop.Api.Database;
 using Webshop.Api.Models.Domain;
 using Webshop.Api.Models.Dto.User;
@@ -87,11 +85,10 @@ namespace Webshop.Api.Services
             // Generate jwt access token
             string token = GenerateToken(user);
 
-            AuthenticatedUser result = new AuthenticatedUser
+            AuthenticatedUser result = _mapper.Map<AppUser, AuthenticatedUser>(user, options =>
             {
-                User = user,
-                Token = token,
-            };
+                options.Items["Token"] = token;
+            });
 
             return result;
         }

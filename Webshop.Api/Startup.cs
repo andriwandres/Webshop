@@ -1,26 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
-using Webshop.Api.Configuration;
+using System;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using Webshop.Api.Configuration.Settings;
 using Webshop.Api.Database;
 using Webshop.Api.Services;
 using Webshop.Api.SignalR.Hubs;
@@ -45,12 +41,15 @@ namespace Webshop.Api
                 builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            var jwtSection = Configuration.GetSection("Jwt");
+            var jwtSection = Configuration.GetSection("JsonWebToken");
             var jwtSettings = jwtSection.Get<JwtSettings>();
             var jwtSecret = Encoding.ASCII.GetBytes(jwtSettings.Secret);
 
-            // Add JWT Configuration
+            var corsSection = Configuration.GetSection("CrossOriginResourceSharing");
+
+            // Add Configuration Objects
             services.Configure<JwtSettings>(jwtSection);
+            services.Configure<CorsSettings>(corsSection);
 
             // Add JWT Bearer Authentication
             services.AddAuthentication(builder =>
@@ -131,6 +130,9 @@ namespace Webshop.Api
                 options.IncludeXmlComments(xmlPath);
             });
 
+            // Add User Claimsprincipal to Service Collection
+            services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
+
             // Add Custom Services
             services.AddScoped<CryptoService>();
             services.AddScoped<AuthService>();
@@ -138,8 +140,6 @@ namespace Webshop.Api
             services.AddScoped<OrderService>();
             services.AddScoped<ReviewService>();
             services.AddScoped<WishlistService>();
-
-            services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
 
             // Add Cross-Origin-Resource-Sharing
             services.AddCors();
@@ -149,7 +149,7 @@ namespace Webshop.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<CorsSettings> corsSettings)
         {
             if (env.IsDevelopment())
             {
@@ -164,16 +164,18 @@ namespace Webshop.Api
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Webshop REST API");
-                options.DocExpansion(DocExpansion.None);
+                options.DocExpansion(DocExpansion.List);
             });
 
-            // Use Cross-Origin-Resource-Sharing (please re-configure for production)
+            CorsSettings cors = corsSettings.Value;
+
+            // Use Cross-Origin-Resource-Sharing
             app.UseCors(builder =>
             {
                 builder
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowAnyOrigin();
+                    .WithOrigins(cors.AllowedOrigins)
+                    .WithMethods(cors.AllowedMethods)
+                    .WithHeaders(cors.AllowedHeaders);
             });
 
             // Use Routing
