@@ -71,7 +71,7 @@ namespace Webshop.Api.Services
 
             ReviewViewModel viewModel = _mapper.Map<Review, ReviewViewModel>(review);
 
-            await _hubContext.Clients.All.SendAsync(SignalREvents.EditReview, viewModel, cancellationToken);
+            await _hubContext.Clients.All.SendAsync(SignalREvents.UpdateReview, viewModel, cancellationToken);
         }
 
         public async Task DeleteReview(int reviewId, CancellationToken cancellationToken = default)

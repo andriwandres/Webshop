@@ -33,6 +33,9 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     List of orders
         /// </returns>
+        /// <response code="200">
+        ///     Returns list of orders
+        /// </response>
         [Authorize]
         [HttpGet("GetOrders")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -55,6 +58,15 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     Placed order
         /// </returns>
+        /// <response code="200">
+        ///     Returns the created order
+        /// </response>
+        /// <response code="400">
+        ///     If validation fails or order quantity exceeds stock quantity
+        /// </response>
+        /// <response code="404">
+        ///     If given product doesn't exist
+        /// </response>
         [Authorize]
         [HttpPost("PlaceOrder")]
         [ProducesResponseType(StatusCodes.Status200OK)]

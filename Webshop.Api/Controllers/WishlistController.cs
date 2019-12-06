@@ -32,6 +32,9 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     List of products on the users wishlist
         /// </returns>
+        /// <response code="200">
+        ///     Returns list of wishlist items
+        /// </response>
         [Authorize]
         [HttpGet("GetWishlist")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -54,6 +57,15 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     Created resource
         /// </returns>
+        /// <response code="200">
+        ///     Returns the added wishlist item
+        /// </response>
+        /// <response code="400">
+        ///     If validation fails
+        /// </response>
+        /// <response code="404">
+        ///     If given product doesn't exist
+        /// </response>
         [Authorize]
         [HttpPost("AddWishlistItem/{productId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -90,9 +102,18 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     No content
         /// </returns>
+        /// <response code="204">
+        ///     Removal of wishlist item was successfull
+        /// </response>
+        /// <response code="400">
+        ///     If validation fails
+        /// </response>
+        /// <response code="404">
+        ///     If given wishlist item doesn't exist
+        /// </response>
         [Authorize]
         [HttpDelete("RemoveWishlistItem/{id:int}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> RemoveWishlistItem([FromRoute] int id, CancellationToken cancellationToken)

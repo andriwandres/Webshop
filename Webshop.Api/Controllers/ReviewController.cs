@@ -38,6 +38,18 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     Created review
         /// </returns>
+        /// <response code="200">
+        ///     Returns the created review
+        /// </response>
+        /// <response code="400">
+        ///     If validation fails
+        /// </response>
+        /// <response code="401">
+        ///     If the user is not the author of the review
+        /// </response>
+        /// <response code="404">
+        ///     If given product doesn't exist
+        /// </response>
         [Authorize]
         [HttpPost("CreateReview/{productId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -85,6 +97,18 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     The updated reviews
         /// </returns>
+        /// <response code="204">
+        ///     Edit of review was successfull
+        /// </response>
+        /// <response code="400">
+        ///     If validation fails
+        /// </response>
+        /// <response code="401">
+        ///     If the user is not the author of the review 
+        /// </response>
+        /// <response code="404">
+        ///     If give review doesn't exist
+        /// </response>
         [Authorize]
         [HttpPut("EditReview/{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -129,6 +153,18 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     No content
         /// </returns>
+        /// <response code="204">
+        ///     Deletion of review was successfull
+        /// </response>
+        /// <response code="400">
+        ///     If validation fails
+        /// </response>
+        /// <response code="401">
+        ///     If the user is not the author of the review
+        /// </response>
+        /// <response code="404">
+        ///     If given review doesn't exist
+        /// </response>
         [Authorize]
         [HttpDelete("DeleteReview/{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

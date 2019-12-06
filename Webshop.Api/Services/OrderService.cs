@@ -70,7 +70,7 @@ namespace Webshop.Api.Services
 
             OrderViewModel viewModel = _mapper.Map<Order, OrderViewModel>(order);
 
-            await _hubContext.Clients.All.SendAsync(SignalREvents.PlaceOrder, model, cancellationToken);
+            await _hubContext.Clients.All.SendAsync(SignalREvents.ReduceQuantity, model, cancellationToken);
 
             return viewModel;
         }

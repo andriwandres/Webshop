@@ -31,6 +31,9 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     List of products
         /// </returns>
+        /// <response code="200">
+        ///     Returns a list of products
+        /// </response>
         [AllowAnonymous]
         [HttpGet("GetProducts")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -53,6 +56,15 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     Single product by its ID
         /// </returns>
+        /// <response code="200">
+        ///     Returns product details
+        /// </response>
+        /// <response code="400">
+        ///     If validation fails
+        /// </response>
+        /// <response code="404">
+        ///     If given product doesn't exist
+        /// </response>
         [AllowAnonymous]
         [HttpGet("GetProductDetails/{productId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

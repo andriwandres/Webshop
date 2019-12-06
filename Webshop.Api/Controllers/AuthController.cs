@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using Webshop.Api.Models.Dto.User;
@@ -33,11 +34,17 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     Whether the email address is taken or not
         /// </returns>
+        /// <response code="200">
+        ///     Returns the boolean result
+        /// </response>
+        /// <response code="400">
+        ///     If provided query parameter is not an email address
+        /// </response>
         [AllowAnonymous]
         [HttpGet("IsEmailTaken")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<bool>> IsEmailTaken([FromQuery(Name = "email")] string email, CancellationToken cancellationToken)
+        public async Task<ActionResult<bool>> IsEmailTaken([FromQuery(Name = "email"), EmailAddress] string email, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -61,6 +68,12 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     No content
         /// </returns>
+        /// <response code="204">
+        ///     Registration was successful
+        /// </response>
+        /// <response code="400">
+        ///     If validation fails or email address is already taken
+        /// </response>
         [AllowAnonymous]
         [HttpPost("Register")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -85,7 +98,7 @@ namespace Webshop.Api.Controllers
         }
 
         /// <summary>
-        ///     Checks a users credentials against the database and returns user information alongside a jwt token.
+        ///     Checks a users credentials against the database and returns user information alongside a valid JWT token.
         /// </summary>
         /// <param name="model">
         ///     Login credentials
@@ -96,6 +109,12 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     User information + Valid JWT Token
         /// </returns>
+        /// <response code="200">
+        ///     Returns user information alongside a valid JWT token
+        /// </response>
+        /// <response code="400">
+        ///     If validation fails or credentials are incorrect
+        /// </response>
         [AllowAnonymous]
         [HttpPost("Login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
