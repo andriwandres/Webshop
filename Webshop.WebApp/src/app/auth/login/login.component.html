@@ -1,0 +1,38 @@
+<!-- Form Card -->
+<div class="card" @fadeIn>
+
+  <!-- Card Header-->
+  <div class="card-header">
+    <span class="card-title mat-headline">Sign In</span>
+    <mat-icon>person</mat-icon>
+  </div>
+
+  <!-- Card Content -->
+  <div class="card-content">
+    <form [formGroup]="form">
+
+      <!-- Email field -->
+      <mat-form-field>
+        <input matInput placeholder="Email address" formControlName="email" spellcheck="false" autocomplete="off">
+      </mat-form-field>
+
+      <!-- Password field -->
+      <mat-form-field>
+        <input matInput type="password" placeholder="Password" formControlName="password" spellcheck="false">
+        <mat-hint align="end">
+          <a href="#">Forgot password?</a>
+        </mat-hint>
+      </mat-form-field>
+
+      <!-- Submit button -->
+      <button type="submit" mat-raised-button color="primary" (click)="submit()">
+        Sign In
+      </button>
+    </form>
+  </div>
+
+  <!-- Register Action Button -->
+  <a class="card-action" tabindex="0" routerLink="/auth/register">
+    Create an account
+  </a>
+</div>
