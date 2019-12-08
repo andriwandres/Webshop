@@ -8,8 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    pathMatch: 'full',
-    redirectTo: 'auth',
+    loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
   },
 ];
 

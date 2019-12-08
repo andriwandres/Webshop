@@ -7,7 +7,7 @@ import * as authActions from './actions';
 
 @Injectable()
 export class AuthEffects {
-  login$ = createEffect(() => this.actions$.pipe(
+  readonly login$ = createEffect(() => this.actions$.pipe(
     ofType(authActions.login),
     exhaustMap(action => this.authService.login(action.credentials).pipe(
       map(user => authActions.loginSuccess({ user })),
@@ -15,7 +15,7 @@ export class AuthEffects {
     )),
   ));
 
-  register$ = createEffect(() => this.actions$.pipe(
+  readonly register$ = createEffect(() => this.actions$.pipe(
     ofType(authActions.register),
     switchMap(action => this.authService.register(action.credentials).pipe(
       map(() => authActions.registerSuccess()),
@@ -23,7 +23,7 @@ export class AuthEffects {
     )),
   ));
 
-  checkEmailTaken = createEffect(() => this.actions$.pipe(
+  readonly checkEmailTaken = createEffect(() => this.actions$.pipe(
     ofType(authActions.checkEmailTaken),
     switchMap(action => this.authService.checkEmailTaken(action.email).pipe(
       map(result => authActions.checkEmailTakenSuccess({ result })),

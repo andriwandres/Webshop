@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, HostBinding } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -43,7 +43,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
   );
 
   readonly form = new FormGroup({
-    displayName: new FormControl('', [
+    firstname: new FormControl('', [
+      Validators.required,
+    ]),
+    lastname: new FormControl('', [
       Validators.required,
     ]),
     email: new FormControl('', [
@@ -62,7 +65,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
     validators: MustMatch('password', 'passwordConfirm')
   });
 
-  get displayName() { return this.form.get('displayName'); }
+  get firstname() { return this.form.get('firstname'); }
+  get lastname() { return this.form.get('lastname'); }
   get email() { return this.form.get('email'); }
   get password() { return this.form.get('password'); }
   get passwordConfirm() { return this.form.get('passwordConfirm'); }
