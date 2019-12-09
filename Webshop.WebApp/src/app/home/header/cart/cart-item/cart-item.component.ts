@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { ProductListing } from 'src/models/products/productListing';
 
 @Component({
   selector: 'app-cart-item',
@@ -7,8 +8,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, 
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartItemComponent {
-  @Input() product: any;
-  @Output() removeItem = new EventEmitter<void>();
+  @Input() product: ProductListing;
+  @Output() removeItem = new EventEmitter<number>();
 
   @HostListener('click', ['$event']) onClick(event: Event): void {
     event.stopPropagation();

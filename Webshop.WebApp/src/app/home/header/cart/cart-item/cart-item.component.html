@@ -5,6 +5,6 @@
   <span id="price"> {{ product.price | currency : 'CHF ' }} </span>
 </div>
 
-<button mat-icon-button (click)="removeItem.emit()">
+<button mat-icon-button (click)="removeItem.emit(product.productId)">
   <mat-icon>close</mat-icon>
 </button>

@@ -4,10 +4,12 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { AuthStoreModule } from './auth-store';
+import { CartStoreModule } from './cart-store';
 
 @NgModule({
   imports: [
     AuthStoreModule,
+    CartStoreModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({

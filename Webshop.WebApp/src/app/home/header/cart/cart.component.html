@@ -1,12 +1,13 @@
 <mat-menu id="menu" [overlapTrigger]="false" (click)="$event.stopPropagation()">
-  <span id="title">My Cart ({{ cartItems.length }})</span>
+  <span id="title">My Cart</span>
 
   <!-- Cart Item -->
   <app-cart-item
-    *ngFor="let item of cartItems"
+    *ngFor="let item of cartItems$ | async"
     [product]="item"
-    (removeItem)="onRemoveItem(item)">
+    (removeItem)="onRemoveItem($event)">
   </app-cart-item>
 
+  <button (click)="addItem()">test</button>
   <a id="checkout-button">Checkout</a>
 </mat-menu>

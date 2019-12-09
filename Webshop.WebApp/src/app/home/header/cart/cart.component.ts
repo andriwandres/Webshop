@@ -1,26 +1,49 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatMenu } from '@angular/material/menu';
+import { select, Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { AppStoreState } from 'src/app/app-store';
+import { CartStoreActions, CartStoreSelectors } from 'src/app/app-store/cart-store';
+import { ProductListing } from 'src/models/products/productListing';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss']
 })
-export class CartComponent {
+export class CartComponent implements OnDestroy {
   @ViewChild(MatMenu, { static: true }) menu: MatMenu;
 
-  cartItems = [
-    {
-      title: 'Product 1',
-      price: 299.00
-    },
-    {
-      title: 'Product 2',
-      price: 199.95
-    }
-  ];
+  private readonly destroy$ = new Subject<void>();
 
-  onRemoveItem(item: any): void {
-    console.log('remove', item);
+  readonly cartItems$ = this.store$.pipe(
+    select(CartStoreSelectors.selectAll),
+    takeUntil(this.destroy$),
+  );
+
+  constructor(private readonly store$: Store<AppStoreState.State>) { }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  addItem() {
+    const product: ProductListing = {
+      productId: Math.random() * 56,
+      title: 'Sample Product',
+      price: 199.69,
+      quantity: 4,
+      averageStars: 4,
+      reviewsCount: 16,
+      image: null,
+    };
+
+    this.store$.dispatch(CartStoreActions.addCartItem({ product }));
+  }
+
+  onRemoveItem(productId: number): void {
+    this.store$.dispatch(CartStoreActions.removeCartItem({ productId }));
   }
 }

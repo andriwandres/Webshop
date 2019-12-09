@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { LoginDto } from 'src/models/auth/login';
 import { RegisterDto } from 'src/models/auth/register';
 import { AuthenticatedUser } from 'src/models/auth/user';
+import { retry } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -28,6 +29,8 @@ export class AuthService {
       params: new HttpParams().set('email', email)
     };
 
-    return this.http.get<boolean>(url, options);
+    return this.http.get<boolean>(url, options).pipe(
+      retry(2)
+    );
   }
 }
