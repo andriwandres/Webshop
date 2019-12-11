@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -31,6 +32,14 @@ namespace Webshop.Api.Services
             _context = context;
             _hubContext = hubContext;
             _authService = authService;
+        }
+
+        public IEnumerable<ReviewViewModel> GetReviews(int productId)
+        {
+            IQueryable<Review> reviews = _context.Reviews
+                .Where(r => r.ProductId == productId);
+
+            return reviews.ProjectTo<ReviewViewModel>(_mapper.ConfigurationProvider);
         }
 
         public async Task<ReviewViewModel> CreateReview(int productId, ReviewDto model, CancellationToken cancellationToken = default)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Webshop.Api.Models.Dto.Review;
@@ -21,6 +22,37 @@ namespace Webshop.Api.Controllers
         {
             _reviewService = reviewService;
             _productService = productService;
+        }
+
+        /// <summary>
+        ///     Returns a list of reviews for a given product
+        /// </summary>
+        /// <param name="productId">
+        ///     ID number of product to get reviews of
+        /// </param>
+        /// <returns>
+        ///     List of reviews for given product
+        /// </returns>
+        /// <response code="200">
+        ///     Returns list of review for given product
+        /// </response>
+        /// <response code="400">
+        ///     If validation fails
+        /// </response>
+        [AllowAnonymous]
+        [HttpGet("GetReviews/{productId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<IEnumerable<ReviewViewModel>> GetReviews([FromRoute] int productId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IEnumerable<ReviewViewModel> reviews = _reviewService.GetReviews(productId);
+
+            return Ok(reviews);
         }
 
         /// <summary>
