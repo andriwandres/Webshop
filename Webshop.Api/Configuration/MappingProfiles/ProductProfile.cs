@@ -2,7 +2,6 @@
 using System.Linq;
 using Webshop.Api.Models.Domain;
 using Webshop.Api.Models.ViewModel.Product;
-using Webshop.Api.Models.ViewModel.Review;
 
 namespace Webshop.Api.Configuration.MappingProfiles
 {
@@ -35,17 +34,6 @@ namespace Webshop.Api.Configuration.MappingProfiles
                     {
                         Image = i.Image,
                         Description = i.Description
-                    }));
-                })
-                .ForMember(vm => vm.Reviews, config =>
-                {
-                    config.MapFrom(p => p.Reviews.Select(r => new ReviewViewModel
-                    {
-                        ReviewId = r.ReviewId,
-                        AuthorName = $"{r.User.Firstname} {r.User.Lastname}",
-                        Body = r.Body,
-                        Stars = r.Stars,
-                        CreatedAt = r.CreatedAt
                     }));
                 });
         }

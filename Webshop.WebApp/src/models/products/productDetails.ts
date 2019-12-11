@@ -1,5 +1,4 @@
 import { ProductImage } from './productImage';
-import { Review } from '../reviews/review';
 
 export interface ProductDetails {
   productId: number;
@@ -10,5 +9,4 @@ export interface ProductDetails {
   averageStars: number;
 
   images: ProductImage[];
-  reviews: Review[];
 }

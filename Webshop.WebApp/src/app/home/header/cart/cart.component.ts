@@ -5,7 +5,6 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AppStoreState } from 'src/app/app-store';
 import { CartStoreActions, CartStoreSelectors } from 'src/app/app-store/cart-store';
-import { ProductListing } from 'src/models/products/productListing';
 
 @Component({
   selector: 'app-cart',
@@ -27,20 +26,6 @@ export class CartComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  addItem() {
-    const product: ProductListing = {
-      productId: Math.random() * 56,
-      title: 'Sample Product',
-      price: 199.69,
-      quantity: 4,
-      averageStars: 4,
-      reviewsCount: 16,
-      image: null,
-    };
-
-    this.store$.dispatch(CartStoreActions.addCartItem({ product }));
   }
 
   onRemoveItem(productId: number): void {
