@@ -3,10 +3,12 @@
 
   <!-- Cart Item -->
   <app-cart-item
-    *ngFor="let item of cartItems$ | async"
+    *ngFor="let item of cartItems$ | async as cartItems"
     [product]="item"
     (removeItem)="onRemoveItem($event)">
   </app-cart-item>
 
-  <a id="checkout-button">Checkout</a>
+  <p id="no-items-text" *ngIf="(itemsCount$ | async) === 0">There are no products in your cart</p>
+
+  <a id="checkout-button" *ngIf="(itemsCount$ | async) >= 1">Checkout</a>
 </mat-menu>

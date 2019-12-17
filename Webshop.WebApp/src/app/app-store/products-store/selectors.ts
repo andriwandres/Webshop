@@ -1,21 +1,28 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import * as appState from '../state';
-import * as authState from './state';
+import * as productState from './state';
 
 export const productFeatureKey = 'products';
-export const selectAuthFeature = createFeatureSelector<appState.State, authState.State>(productFeatureKey);
+export const selectProductsFeature = createFeatureSelector<appState.State, productState.State>(productFeatureKey);
 
 export const selectLoading = createSelector(
-  selectAuthFeature,
+  selectProductsFeature,
   (state) => state.isLoading
 );
 
 export const selectError = createSelector(
-  selectAuthFeature,
+  selectProductsFeature,
   (state) => state.error,
 );
 
 export const selectSelectedProduct = createSelector(
-  selectAuthFeature,
+  selectProductsFeature,
   (state) => state.selectedProduct,
 );
+
+export const {
+  selectAll,
+  selectEntities,
+  selectIds,
+  selectTotal,
+} = productState.productAdapter.getSelectors(selectProductsFeature);

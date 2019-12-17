@@ -3,7 +3,9 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { ProductsService } from 'src/app/core/products/products.service';
 import * as productActions from './actions';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class ProductEffects {
   readonly getProducts$ = createEffect(() => this.actions$.pipe(
     ofType(productActions.getProducts),
