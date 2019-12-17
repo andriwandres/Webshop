@@ -138,6 +138,23 @@
                 If given product doesn't exist
             </response>
         </member>
+        <member name="M:Webshop.Api.Controllers.ReviewController.GetReviews(System.Int32)">
+            <summary>
+                Returns a list of reviews for a given product
+            </summary>
+            <param name="productId">
+                ID number of product to get reviews of
+            </param>
+            <returns>
+                List of reviews for given product
+            </returns>
+            <response code="200">
+                Returns list of review for given product
+            </response>
+            <response code="400">
+                If validation fails
+            </response>
+        </member>
         <member name="M:Webshop.Api.Controllers.ReviewController.CreateReview(System.Int32,Webshop.Api.Models.Dto.Review.ReviewDto,System.Threading.CancellationToken)">
             <summary>
                 Creates a review to a product in the database
