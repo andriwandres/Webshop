@@ -25,8 +25,8 @@ namespace Webshop.Api.Controllers
         /// <summary>
         ///     Checks whether an email address is already used by another user in the database
         /// </summary>
-        /// <param name="email">
-        ///     Email to be checked against the database
+        /// <param name="query">
+        ///     Query parameter containing the email address to check against the database
         /// </param>
         /// <param name="cancellationToken">
         ///     Token for cancelling the request. This token is provided by the framework itself
@@ -44,14 +44,14 @@ namespace Webshop.Api.Controllers
         [HttpGet("IsEmailTaken")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<bool>> IsEmailTaken([FromQuery(Name = "email"), EmailAddress] string email, CancellationToken cancellationToken)
+        public async Task<ActionResult<bool>> IsEmailTaken([FromQuery] EmailQueryDto query, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool isTaken = await _authService.IsEmailTaken(email, cancellationToken);
+            bool isTaken = await _authService.IsEmailTaken(query.Email, cancellationToken);
 
             return Ok(isTaken);
         }
