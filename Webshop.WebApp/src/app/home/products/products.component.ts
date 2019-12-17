@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
-import { startWith, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { AppStoreState } from 'src/app/app-store';
 import { ProductStoreActions, ProductStoreSelectors } from 'src/app/app-store/products-store';
-import { ProductListing } from 'src/models/products/productListing';
 
 @Component({
   selector: 'app-products',

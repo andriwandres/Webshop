@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
       ofType(AuthStoreActions.loginSuccess),
       take(1),
     ).subscribe(() => {
-      this.router.navigate(['/chats']);
+      this.router.navigate(['/products']);
     });
   }
 
