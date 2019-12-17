@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Webshop.Api.Models.Dto.Product;
 using Webshop.Api.Models.ViewModel.Product;
 using Webshop.Api.Services;
 
@@ -23,8 +24,11 @@ namespace Webshop.Api.Controllers
         }
 
         /// <summary>
-        ///     Returns a list of products
+        ///     Returns a list of products and filters them according to a given query
         /// </summary>
+        /// <param name="query">
+        ///     Query parameters containing the filter term for filtering products
+        /// </param>
         /// <param name="cancellationToken">
         ///     Token for cancelling the request. This token is provided by the framework itself
         /// </param>
@@ -32,14 +36,22 @@ namespace Webshop.Api.Controllers
         ///     List of products
         /// </returns>
         /// <response code="200">
-        ///     Returns a list of products
+        ///     Returns a filtered list of products
+        /// </response>
+        /// <response code="400">
+        ///     If validation of query parameters fails
         /// </response>
         [AllowAnonymous]
         [HttpGet("GetProducts")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<ProductListingViewModel>>> GetProducts(CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<ProductListingViewModel>>> GetProducts([FromQuery] ProductQueryDto query, CancellationToken cancellationToken)
         {
-            IEnumerable<ProductListingViewModel> products = await _productService.GetProducts(cancellationToken);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IEnumerable<ProductListingViewModel> products = await _productService.GetProducts(query, cancellationToken);
 
             return Ok(products);
         }

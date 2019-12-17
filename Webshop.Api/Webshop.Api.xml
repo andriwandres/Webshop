@@ -101,10 +101,13 @@
                 If given product doesn't exist
             </response>
         </member>
-        <member name="M:Webshop.Api.Controllers.ProductController.GetProducts(System.Threading.CancellationToken)">
+        <member name="M:Webshop.Api.Controllers.ProductController.GetProducts(Webshop.Api.Models.Dto.Product.ProductQueryDto,System.Threading.CancellationToken)">
             <summary>
-                Returns a list of products
+                Returns a list of products and filters them according to a given query
             </summary>
+            <param name="query">
+                Query parameters containing the filter term for filtering products
+            </param>
             <param name="cancellationToken">
                 Token for cancelling the request. This token is provided by the framework itself
             </param>
@@ -112,7 +115,10 @@
                 List of products
             </returns>
             <response code="200">
-                Returns a list of products
+                Returns a filtered list of products
+            </response>
+            <response code="400">
+                If validation of query parameters fails
             </response>
         </member>
         <member name="M:Webshop.Api.Controllers.ProductController.GetProductsDetails(System.Int32,System.Threading.CancellationToken)">

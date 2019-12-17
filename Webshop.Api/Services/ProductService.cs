@@ -2,11 +2,13 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Webshop.Api.Database;
 using Webshop.Api.Models.Domain;
 using Webshop.Api.Models.Dto.Order;
+using Webshop.Api.Models.Dto.Product;
 using Webshop.Api.Models.ViewModel.Product;
 
 namespace Webshop.Api.Services
@@ -22,13 +24,18 @@ namespace Webshop.Api.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<ProductListingViewModel>> GetProducts(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ProductListingViewModel>> GetProducts(ProductQueryDto query, CancellationToken cancellationToken = default)
         {
+            string filter = query.Filter == null
+                ? string.Empty 
+                : query.Filter.Trim().ToLower();
+
             IEnumerable<ProductListingViewModel> products = await _context.Products
                 .AsNoTracking()
                 .Include(p => p.Images)
                 .Include(p => p.Reviews)
                 .Include(p => p.WishlistItems)
+                .Where(p => p.Title.ToLower().Contains(filter))
                 .ProjectTo<ProductListingViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
