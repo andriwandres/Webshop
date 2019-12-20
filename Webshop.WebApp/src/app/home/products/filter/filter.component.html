@@ -1,0 +1,17 @@
+
+<form [formGroup]="form" id="form">
+  <mat-form-field appearance="outline">
+    <mat-label>Search</mat-label>
+    <input matInput>
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Sort Criteria</mat-label>
+    <mat-select formControlName="sortCriteria">
+      <mat-option value="relevance">Relevance</mat-option>
+      <mat-option value="name">Name</mat-option>
+      <mat-option value="price">Price</mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>

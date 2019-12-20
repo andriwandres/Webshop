@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AppStoreState } from 'src/app/app-store';
 import { ProductStoreActions, ProductStoreSelectors } from 'src/app/app-store/products-store';
+import { ProductListing } from 'src/models/products/productListing';
 
 @Component({
   selector: 'app-products',
@@ -27,5 +28,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  trackById(product: ProductListing): number {
+    return product.productId;
   }
 }

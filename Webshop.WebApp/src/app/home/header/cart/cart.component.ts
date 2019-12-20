@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { AppStoreState } from 'src/app/app-store';
 import { CartStoreActions, CartStoreSelectors } from 'src/app/app-store/cart-store';
+import { ProductListing } from 'src/models/products/productListing';
 
 @Component({
   selector: 'app-cart',
@@ -36,6 +37,10 @@ export class CartComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  trackById(product: ProductListing): number {
+    return product.productId;
   }
 
   onRemoveItem(productId: number): void {

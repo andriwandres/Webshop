@@ -3,7 +3,7 @@
 
   <!-- Cart Item -->
   <app-cart-item
-    *ngFor="let item of cartItems$ | async as cartItems"
+    *ngFor="let item of cartItems$ | async as cartItems; trackBy: trackById"
     [product]="item"
     (removeItem)="onRemoveItem($event)">
   </app-cart-item>

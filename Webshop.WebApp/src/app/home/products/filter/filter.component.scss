@@ -1,0 +1,13 @@
+:host {
+  height: 100%;
+  width: 20%;
+  background: white;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+#form {
+  display: flex;
+  flex-direction: column;
+}
