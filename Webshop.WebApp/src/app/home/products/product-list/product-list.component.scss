@@ -1,0 +1,10 @@
+
+:host {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+app-product {
+  margin: 20px;
+  cursor: pointer;
+}

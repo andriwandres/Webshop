@@ -1,12 +1,7 @@
 
 :host {
   display: flex;
-  flex-grow: 1;
   flex-direction: row;
   background-color: #ddd;
-}
-
-app-product {
-  margin: 20px;
-  cursor: pointer;
+  flex-grow: 1;
 }

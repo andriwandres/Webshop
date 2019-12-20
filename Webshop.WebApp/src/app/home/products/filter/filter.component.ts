@@ -1,7 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { merge, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { AppStoreState } from 'src/app/app-store';
+import { ProductStoreActions } from 'src/app/app-store/products-store';
 
 @Component({
   selector: 'app-filter',
@@ -12,18 +15,32 @@ export class FilterComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   readonly form = new FormGroup({
-    filter: new FormControl(''),
-    sortCriteria: new FormControl('relevance')
+    filterTerm: new FormControl(''),
+    sortCriteria: new FormControl('bestseller')
   });
 
-  constructor() { }
+  get filterTerm() { return this.form.get('filterTerm'); }
+  get sortCriteria() { return this.form.get('sortCriteria'); }
+
+  constructor(private readonly store$: Store<AppStoreState.State>) { }
 
   ngOnInit(): void {
-    this.form.valueChanges.pipe(
+    const filter$ = this.filterTerm.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      filter(value => !!value)
+      takeUntil(this.destroy$),
     );
+
+    const sort$ = this.sortCriteria.valueChanges.pipe(
+      distinctUntilChanged(),
+      takeUntil(this.destroy$),
+    );
+
+    merge(filter$, sort$).pipe(
+      takeUntil(this.destroy$),
+    ).subscribe(() => {
+      this.store$.dispatch(ProductStoreActions.getProducts());
+    });
   }
 
   ngOnDestroy(): void {

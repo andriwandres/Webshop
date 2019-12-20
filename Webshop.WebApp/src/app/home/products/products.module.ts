@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FilterModule } from './filter/filter.module';
-import { ProductModule } from './product/product.module';
+import { ProductListModule } from './product-list/product-list.module';
 import { ProductsRoutingModule } from './products-routing.module';
 import { ProductsComponent } from './products.component';
 
@@ -10,7 +10,7 @@ import { ProductsComponent } from './products.component';
   imports: [
     CommonModule,
     FilterModule,
-    ProductModule,
+    ProductListModule,
     ProductsRoutingModule,
   ]
 })

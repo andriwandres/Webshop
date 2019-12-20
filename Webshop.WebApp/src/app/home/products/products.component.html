@@ -1,5 +1,3 @@
 <app-filter></app-filter>
 
-<div style="display: flex; flex-wrap: wrap;">
-  <app-product *ngFor="let product of products$ | async as products; trackBy: trackById" [product]="product"></app-product>
-</div>
+<app-product-list></app-product-list>

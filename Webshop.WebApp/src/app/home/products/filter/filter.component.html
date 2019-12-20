@@ -1,17 +1,23 @@
 
 <form [formGroup]="form" id="form">
-  <mat-form-field appearance="outline">
+  <div id="title-container">
+    <span id="title">Filter</span>
+    <mat-icon>filter_list</mat-icon>
+  </div>
+
+  <mat-form-field appearance="outline" id="filter-field">
     <mat-label>Search</mat-label>
-    <input matInput>
+    <input matInput formControlName="filterTerm" autocomplete="off">
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Sort Criteria</mat-label>
+  <mat-form-field appearance="outline" id="sort-criteria-field">
+    <mat-label>Sort Products By</mat-label>
     <mat-select formControlName="sortCriteria">
-      <mat-option value="relevance">Relevance</mat-option>
-      <mat-option value="name">Name</mat-option>
-      <mat-option value="price">Price</mat-option>
+      <mat-option value="bestseller">Bestseller</mat-option>
+      <mat-option value="bestRating">Best Rating</mat-option>
+      <mat-option value="cheapest">Cheapest</mat-option>
+      <mat-option value="mostExpensive">Most Expensive</mat-option>
     </mat-select>
   </mat-form-field>
 </form>

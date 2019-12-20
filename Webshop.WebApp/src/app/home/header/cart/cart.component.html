@@ -1,5 +1,5 @@
 <mat-menu id="menu" [overlapTrigger]="false" (click)="$event.stopPropagation()">
-  <span id="title">My Cart</span>
+  <span id="title">My Cart ({{ itemsCount$ | async }})</span>
 
   <!-- Cart Item -->
   <app-cart-item

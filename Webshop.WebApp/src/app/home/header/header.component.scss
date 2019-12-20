@@ -10,6 +10,15 @@
   background-color: #4B71BB;
 }
 
+#title-container {
+  display: flex;
+  align-items: center;
+
+  #logo {
+    margin-right: 10px;
+  }
+}
+
 #actions {
   display: flex;
   align-items: center;
