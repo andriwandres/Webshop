@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Webshop.Api.Database;
@@ -26,16 +28,39 @@ namespace Webshop.Api.Services
 
         public async Task<IEnumerable<ProductListingViewModel>> GetProducts(ProductQueryDto query, CancellationToken cancellationToken = default)
         {
+            // Format filter
             string filter = query.Filter == null
                 ? string.Empty 
                 : query.Filter.Trim().ToLower();
 
+            Expression<Func<Product, object>> sortPredicate = null;
+
+            // Determine sort predicate
+            switch (query.SortCriteria)
+            {
+                case SortCriteria.Bestseller:
+                    sortPredicate = product => -product.Orders.Count();
+                    break;
+                case SortCriteria.BestRated:
+                    sortPredicate = product => -product.Reviews.Average(r => r.Stars);
+                    break;
+                case SortCriteria.Cheapest:
+                    sortPredicate = product => product.Price;
+                    break;
+                case SortCriteria.MostExpensive:
+                    sortPredicate = product => -product.Price;
+                    break;
+            }
+
+            // Query + map products
             IEnumerable<ProductListingViewModel> products = await _context.Products
                 .AsNoTracking()
+                .Include(p => p.Orders)
                 .Include(p => p.Images)
                 .Include(p => p.Reviews)
                 .Include(p => p.WishlistItems)
                 .Where(p => p.Title.ToLower().Contains(filter))
+                .OrderBy(sortPredicate)
                 .ProjectTo<ProductListingViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
@@ -44,6 +69,7 @@ namespace Webshop.Api.Services
 
         public async Task<ProductDetailViewModel> GetProductDetails(int productId, CancellationToken cancellationToken = default)
         {
+            // Query products
             Product productDomain = await _context.Products
                 .AsNoTracking()
                 .Include(p => p.Images)
@@ -51,6 +77,7 @@ namespace Webshop.Api.Services
                 .Include(p => p.Reviews).ThenInclude(r => r.User)
                 .FirstOrDefaultAsync(p => p.ProductId == productId, cancellationToken);
 
+            // Map products
             ProductDetailViewModel product = _mapper.Map<Product, ProductDetailViewModel>(productDomain);
 
             return product;

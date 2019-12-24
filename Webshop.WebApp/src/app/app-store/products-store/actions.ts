@@ -1,6 +1,7 @@
 import { createAction, props, union } from '@ngrx/store';
 import { ProductListing } from 'src/models/products/productListing';
 import { ProductDetails } from 'src/models/products/productDetails';
+import { ProductQuery } from 'src/models/products/productQuery';
 
 export enum ActionTypes {
   GET_PRODUCTS = '[Product] Get Products',
@@ -13,7 +14,7 @@ export enum ActionTypes {
 }
 
 // Get products
-export const getProducts = createAction(ActionTypes.GET_PRODUCTS);
+export const getProducts = createAction(ActionTypes.GET_PRODUCTS, props<{ query: ProductQuery }>());
 export const getProductsSuccess = createAction(ActionTypes.GET_PRODUCTS_SUCCESS, props<{ products: ProductListing[] }>());
 export const getProductsFailure = createAction(ActionTypes.GET_PRODUCTS_FAILURE, props<{ error: any }>());
 

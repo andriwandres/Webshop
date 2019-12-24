@@ -9,8 +9,7 @@ export interface State extends EntityState<ProductListing> {
 }
 
 export const productAdapter = createEntityAdapter<ProductListing>({
-  selectId: product => product.productId,
-  sortComparer: (a, b) => a.productId - b.productId,
+  selectId: product => product.productId
 });
 
 export const initialState: State = productAdapter.getInitialState({

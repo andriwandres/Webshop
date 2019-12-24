@@ -5,6 +5,7 @@ import { ProductStoreSelectors, ProductStoreActions } from 'src/app/app-store/pr
 import { Subject } from 'rxjs';
 import { AppStoreState } from 'src/app/app-store';
 import { ProductListing } from 'src/models/products/productListing';
+import { ProductQuery, SortCriteria } from 'src/models/products/productQuery';
 
 @Component({
   selector: 'app-product-list',
@@ -22,7 +23,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
   constructor(private readonly store$: Store<AppStoreState.State>) { }
 
   ngOnInit(): void {
-    this.store$.dispatch(ProductStoreActions.getProducts());
+    const query: ProductQuery = {
+      filter: '',
+      sortCriteria: SortCriteria.bestseller
+    };
+
+    this.store$.dispatch(ProductStoreActions.getProducts({ query }));
   }
 
   ngOnDestroy(): void {

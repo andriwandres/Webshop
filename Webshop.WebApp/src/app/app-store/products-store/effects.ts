@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 export class ProductEffects {
   readonly getProducts$ = createEffect(() => this.actions$.pipe(
     ofType(productActions.getProducts),
-    switchMap(() => this.productsService.getProducts().pipe(
+    switchMap(action => this.productsService.getProducts(action.query).pipe(
       map(products => productActions.getProductsSuccess({ products })),
       catchError(error => of(productActions.getProductsFailure({ error }))),
     )),
