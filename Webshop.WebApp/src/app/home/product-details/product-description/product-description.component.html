@@ -1,0 +1,21 @@
+<span id="title"> {{ product.title }} </span>
+
+<div id="rating">
+  <div id="star-rating">
+    <mat-icon> {{ product.averageStars >= 1 ? 'star' : 'star_border' }} </mat-icon>
+    <mat-icon> {{ product.averageStars >= 2 ? 'star' : 'star_border' }} </mat-icon>
+    <mat-icon> {{ product.averageStars >= 3 ? 'star' : 'star_border' }} </mat-icon>
+    <mat-icon> {{ product.averageStars >= 4 ? 'star' : 'star_border' }} </mat-icon>
+    <mat-icon> {{ product.averageStars >= 5 ? 'star' : 'star_border' }} </mat-icon>
+  </div>
+  <span id="review-count"> {{ product.reviewsCount }} </span>
+</div>
+
+<span id="price"> {{ product.price }}.-- </span>
+
+<span id="description"> {{ product.description }} </span>
+
+<div class="actions">
+  <button id="add-to-cart-button"> Add to Cart </button>
+  <button id="add-to-wishlist-button"> Add to Wishlist </button>
+</div>

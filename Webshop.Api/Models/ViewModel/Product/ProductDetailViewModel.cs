@@ -11,6 +11,7 @@ namespace Webshop.Api.Models.ViewModel.Product
         public int Quantity { get; set; }
         public float Price { get; set; }
         public float AverageStars { get; set; }
+        public int ReviewsCount { get; set; }
         public IEnumerable<ProductImageViewModel> Images { get; set; }
     }
 }

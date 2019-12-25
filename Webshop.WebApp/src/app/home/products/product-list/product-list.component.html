@@ -1,2 +1,6 @@
 
-<app-product *ngFor="let product of products$ | async as products; trackBy: trackById" [product]="product"></app-product>
+<app-product
+  *ngFor="let product of products$ | async as products; trackBy: trackById"
+  [product]="product"
+  [routerLink]="product.productId">
+</app-product>

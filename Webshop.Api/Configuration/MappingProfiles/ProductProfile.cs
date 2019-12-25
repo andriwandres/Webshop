@@ -35,6 +35,10 @@ namespace Webshop.Api.Configuration.MappingProfiles
                         Image = i.Image,
                         Description = i.Description
                     }));
+                })
+                .ForMember(vm => vm.ReviewsCount, config =>
+                {
+                    config.MapFrom(p => p.Reviews.Count());
                 });
         }
     }

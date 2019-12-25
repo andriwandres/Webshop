@@ -7,6 +7,7 @@ export interface ProductDetails {
   quantity: number;
   price: number;
   averageStars: number;
+  reviewsCount: number;
 
   images: ProductImage[];
 }

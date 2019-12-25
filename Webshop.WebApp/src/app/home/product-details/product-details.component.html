@@ -1,1 +1,15 @@
-<p>product-details works!</p>
+<div id="container">
+  <button mat-button id="back-button" routerLink="/products">
+    <mat-icon>arrow_back</mat-icon>
+    <span>Back</span>
+  </button>
+
+  <div id="product" *ngIf="!(loading$ | async) && product$ | async as product">
+    <app-image-gallery></app-image-gallery>
+    <app-product-description
+      [product]="product"
+      (addToCart)="onAddToCart()"
+      (addToWishlist)="onAddToWishlist()">
+    </app-product-description>
+  </div>
+</div>
