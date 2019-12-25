@@ -40,11 +40,11 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  onAddToCart(): void {
-
+  onAddToCart(id: number): void {
+    console.log(id);
   }
 
-  onAddToWishlist(): void {
-
+  onAddToWishlist(id: number): void {
+    console.log(id);
   }
 }
