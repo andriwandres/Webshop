@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CartModule } from './cart/cart.module';
+import { WishlistModule } from './wishlist/wishlist.module';
 
 @NgModule({
   declarations: [HeaderComponent],
@@ -16,6 +17,7 @@ import { CartModule } from './cart/cart.module';
     MatMenuModule,
     MatTooltipModule,
     CartModule,
+    WishlistModule,
   ],
   exports: [HeaderComponent]
 })

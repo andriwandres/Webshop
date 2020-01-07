@@ -32,6 +32,7 @@ const reducer = createReducer(
   on(productActions.getProductDetails, (state) => {
     return {
       ...state,
+      selectedProduct: null,
       isLoading: true,
       error: null,
     };

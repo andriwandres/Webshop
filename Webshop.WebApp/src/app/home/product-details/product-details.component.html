@@ -4,7 +4,7 @@
     <span>Back</span>
   </button>
 
-  <div id="product" *ngIf="!(loading$ | async) && product$ | async as product">
+  <div id="product" *ngIf="product$ | async as product">
     <app-image-gallery></app-image-gallery>
     <app-product-description
       [product]="product"

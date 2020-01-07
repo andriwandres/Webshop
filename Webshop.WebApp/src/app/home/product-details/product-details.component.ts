@@ -14,11 +14,6 @@ import { ProductStoreActions, ProductStoreSelectors } from 'src/app/app-store/pr
 export class ProductDetailsComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
-  readonly loading$ = this.store$.pipe(
-    select(ProductStoreSelectors.selectLoading),
-    takeUntil(this.destroy$),
-  );
-
   readonly product$ = this.store$.pipe(
     select(ProductStoreSelectors.selectSelectedProduct),
     takeUntil(this.destroy$),

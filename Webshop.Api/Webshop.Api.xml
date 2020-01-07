@@ -293,9 +293,9 @@
                 Token for cancelling the request. This token is provided by the framework itself
             </param>
             <returns>
-                No content
+                ID number of removed wishlist item
             </returns>
-            <response code="204">
+            <response code="200">
                 Removal of wishlist item was successfull
             </response>
             <response code="400">

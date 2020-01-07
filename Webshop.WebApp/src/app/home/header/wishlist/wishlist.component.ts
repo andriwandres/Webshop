@@ -4,8 +4,8 @@ import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { AppStoreState } from 'src/app/app-store';
-import { CartStoreSelectors } from 'src/app/app-store/cart-store';
-import { ProductListing } from 'src/models/products/productListing';
+import { WishlistStoreActions, WishlistStoreSelectors } from 'src/app/app-store/wishlist-store';
+import { WishlistItem } from 'src/models/wishlist/wishlist-item';
 
 @Component({
   selector: 'app-wishlist',
@@ -18,12 +18,12 @@ export class WishlistComponent implements OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   readonly itemsCount$ = this.store$.pipe(
-    select(CartStoreSelectors.selectTotal),
+    select(WishlistStoreSelectors.selectTotal),
     takeUntil(this.destroy$),
   );
 
   readonly wishlistItems$ = this.store$.pipe(
-    select(CartStoreSelectors.selectAll),
+    select(WishlistStoreSelectors.selectAll),
     takeUntil(this.destroy$),
   );
 
@@ -39,11 +39,11 @@ export class WishlistComponent implements OnDestroy {
     this.destroy$.complete();
   }
 
-  trackById(product: ProductListing): number {
-    return product.productId;
+  trackById(product: WishlistItem): number {
+    return product.wishlistItemId;
   }
 
-  onRemoveItem(productId: number): void {
-    this.store$.dispatch(CartStoreActions.removeCartItem({ productId }));
+  onRemoveItem(wishlistItemId: number): void {
+    this.store$.dispatch(WishlistStoreActions.removeWishlistItem({ wishlistItemId }));
   }
 }

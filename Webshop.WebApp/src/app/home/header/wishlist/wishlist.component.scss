@@ -1,0 +1,31 @@
+#menu {
+  display: flex;
+  flex-direction: column;
+}
+
+::ng-deep .mat-menu-panel {
+  padding: 0 10px!important;
+  width: 600px !important;
+}
+
+#checkout-button {
+  background-color: #4B71BB;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+
+  &:hover, &:focus {
+    background-color: darken(#4B71BB, 10%);
+  }
+}
+
+#no-items-text {
+  font-style: italic;
+  color: grey;
+  font-size: 12px;
+}

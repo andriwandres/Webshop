@@ -1,14 +1,13 @@
 <mat-menu id="menu" [overlapTrigger]="false" (click)="$event.stopPropagation()">
   <span id="title">My Wishlist ({{ itemsCount$ | async }})</span>
 
-  <!-- Cart Item -->
-  <app-cart-item
+  <!-- Wishlist Item -->
+  <app-wishlist-item
     *ngFor="let item of wishlistItems$ | async as wishlistItems; trackBy: trackById"
-    [product]="item"
+    [item]="item"
     (removeItem)="onRemoveItem($event)">
-  </app-cart-item>
+  </app-wishlist-item>
 
-  <p id="no-items-text" *ngIf="(itemsCount$ | async) === 0">There are no products in your cart</p>
-
+  <p id="no-items-text" *ngIf="(itemsCount$ | async) === 0">There are no products in your wishlist</p>
   <a id="checkout-button" *ngIf="(itemsCount$ | async) >= 1">Checkout</a>
 </mat-menu>

@@ -100,9 +100,9 @@ namespace Webshop.Api.Controllers
         ///     Token for cancelling the request. This token is provided by the framework itself
         /// </param>
         /// <returns>
-        ///     No content
+        ///     ID number of removed wishlist item
         /// </returns>
-        /// <response code="204">
+        /// <response code="200">
         ///     Removal of wishlist item was successfull
         /// </response>
         /// <response code="400">
@@ -113,10 +113,10 @@ namespace Webshop.Api.Controllers
         /// </response>
         [Authorize]
         [HttpDelete("RemoveWishlistItem/{id:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> RemoveWishlistItem([FromRoute] int id, CancellationToken cancellationToken)
+        public async Task<ActionResult<int>> RemoveWishlistItem([FromRoute] int id, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -132,7 +132,7 @@ namespace Webshop.Api.Controllers
 
             await _wishlistService.RemoveWishlistItem(id, cancellationToken);
 
-            return NoContent();
+            return Ok(id);
         }
     }
 }

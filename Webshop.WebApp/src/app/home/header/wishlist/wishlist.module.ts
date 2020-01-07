@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { WishlistComponent } from './wishlist.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { WishlistItemModule } from './wishlist-item/wishlist-item.module';
+import { WishlistComponent } from './wishlist.component';
 
 @NgModule({
   declarations: [WishlistComponent],
@@ -12,6 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
+    WishlistItemModule,
   ],
   exports: [WishlistComponent]
 })

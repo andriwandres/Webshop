@@ -23,9 +23,9 @@ export class WishlistService {
     return this.http.post<WishlistItem>(url, null);
   }
 
-  removeWishlistItem(wishlistItemId: number): Observable<void> {
+  removeWishlistItem(wishlistItemId: number): Observable<number> {
     const url = `${environment.api.wishlist}/RemoveWishlistItem/${wishlistItemId}`;
 
-    return this.http.delete<void>(url);
+    return this.http.delete<number>(url);
   }
 }

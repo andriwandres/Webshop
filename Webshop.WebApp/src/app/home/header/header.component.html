@@ -8,11 +8,12 @@
     <mat-icon>shopping_cart</mat-icon>
   </button>
 
-  <button mat-icon-button matTooltip="Wishlist" matTooltipShowDelay="300" matTooltipPosition="below">
+  <button mat-icon-button matTooltip="Wishlist" matTooltipShowDelay="300" matTooltipPosition="below" [matMenuTriggerFor]="wishlist.menu">
     <mat-icon>bookmarks</mat-icon>
   </button>
 
   <app-cart #cart></app-cart>
+  <app-wishlist #wishlist></app-wishlist>
 
   <div id="avatar"></div>
 </div>

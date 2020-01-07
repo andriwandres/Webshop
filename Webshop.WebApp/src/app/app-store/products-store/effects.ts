@@ -24,7 +24,7 @@ export class ProductEffects {
   ));
 
   constructor(
-    private readonly actions$: Actions,
     private readonly productsService: ProductsService,
+    private readonly actions$: Actions<productActions.ProductActionUnion>,
   ) {}
 }
