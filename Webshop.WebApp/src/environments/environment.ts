@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   api: {
     auth: 'http://localhost:49908/api/Auth',
+    cart: 'http://localhost:49908/api/Cart',
     product: 'http://localhost:49908/api/Product',
     order: 'http://localhost:49908/api/Order',
     review: 'http://localhost:49908/api/Review',

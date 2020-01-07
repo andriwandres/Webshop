@@ -1,18 +1,18 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatMenu } from '@angular/material/menu';
 import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { AppStoreState } from 'src/app/app-store';
 import { CartStoreActions, CartStoreSelectors } from 'src/app/app-store/cart-store';
-import { ProductListing } from 'src/models/products/productListing';
+import { CartItem } from 'src/models/cart/cart-item';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss']
 })
-export class CartComponent implements OnDestroy {
+export class CartComponent implements OnInit, OnDestroy {
   @ViewChild(MatMenu, { static: true }) menu: MatMenu;
 
   private readonly destroy$ = new Subject<void>();
@@ -34,16 +34,20 @@ export class CartComponent implements OnDestroy {
 
   constructor(private readonly store$: Store<AppStoreState.State>) { }
 
+  ngOnInit(): void {
+    this.store$.dispatch(CartStoreActions.getCart());
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  trackById(product: ProductListing): number {
-    return product.productId;
+  trackById(product: CartItem): number {
+    return product.cartItemId;
   }
 
-  onRemoveItem(productId: number): void {
-    this.store$.dispatch(CartStoreActions.removeCartItem({ productId }));
+  onRemoveItem(cartItemId: number): void {
+    this.store$.dispatch(CartStoreActions.removeCartItem({ cartItemId }));
   }
 }

@@ -5,22 +5,73 @@ import { cartAdapter, initialState, State } from './state';
 const reducer = createReducer(
   initialState,
 
-  on(cartActions.addCartItem, (state, { product }) => {
-    return cartAdapter.addOne(product, {
-      ...state
+  // Get Cart
+  on(cartActions.getCart, (state) => {
+    return {
+      ...state,
+      isLoading: true,
+      error: null,
+    };
+  }),
+  on(cartActions.getCartSuccess, (state, { cartItems }) => {
+    return cartAdapter.addAll(cartItems, {
+      ...state,
+      isLoading: false,
+      error: null,
     });
   }),
-
-  on(cartActions.removeCartItem, (state, { productId }) => {
-    return cartAdapter.removeOne(productId, {
-      ...state
-    });
+  on(cartActions.getCartFailure, (state, { error }) => {
+    return {
+      ...state,
+      isLoading: false,
+      error
+    };
   }),
 
-  on(cartActions.clearCart, (state) => {
-    return cartAdapter.removeAll({
-      ...state
+  // Add Cart Item
+  on(cartActions.addCartItem, (state) => {
+    return {
+      ...state,
+      isLoading: true,
+      error: null,
+    };
+  }),
+  on(cartActions.addCartItemSuccess, (state, { cartItem }) => {
+    return cartAdapter.addOne(cartItem, {
+      ...state,
+      isLoading: false,
+      error: null,
     });
+  }),
+  on(cartActions.addCartItemFailure, (state, { error }) => {
+    return {
+      ...state,
+      isLoading: false,
+      error,
+    };
+  }),
+
+  // Remove Cart Item
+  on(cartActions.removeCartItem, (state) => {
+    return {
+      ...state,
+      isLoading: true,
+      error: null,
+    };
+  }),
+  on(cartActions.removeCartItemSuccess, (state, { cartItemId }) => {
+    return cartAdapter.removeOne(cartItemId, {
+      ...state,
+      isLoading: false,
+      error: null,
+    });
+  }),
+  on(cartActions.removeCartItemFailure, (state, { error }) => {
+    return {
+      ...state,
+      isLoading: false,
+      error,
+    };
   })
 );
 

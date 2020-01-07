@@ -20,7 +20,9 @@ namespace Webshop.Api.Configuration.MappingProfiles
                 })
                 .ForMember(vm => vm.ProductImage, config =>
                 {
-                    config.MapFrom(wi => wi.Product.Images.FirstOrDefault());
+                    config.MapFrom(wi => wi.Product.Images.Count() == 0 
+                        ? null 
+                        : wi.Product.Images.FirstOrDefault().Image);
                 });
         }
     }

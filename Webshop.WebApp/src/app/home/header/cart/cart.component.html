@@ -4,11 +4,10 @@
   <!-- Cart Item -->
   <app-cart-item
     *ngFor="let item of cartItems$ | async as cartItems; trackBy: trackById"
-    [product]="item"
+    [item]="item"
     (removeItem)="onRemoveItem($event)">
   </app-cart-item>
 
   <p id="no-items-text" *ngIf="(itemsCount$ | async) === 0">There are no products in your cart</p>
-
   <a id="checkout-button" *ngIf="(itemsCount$ | async) >= 1">Checkout</a>
 </mat-menu>

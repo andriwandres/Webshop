@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,9 +24,9 @@ namespace Webshop.Api.Services
         private readonly ClaimsPrincipal _user;
         private readonly IHubContext<WebshopHub> _hubContext;
 
-        public WishlistService(IMapper mapper, WebshopContext context, AuthService authService, IHubContext<WebshopHub> hubContext, ClaimsPrincipal user)
+        public WishlistService(IMapper mapper, WebshopContext context, AuthService authService, IHubContext<WebshopHub> hubContext, IHttpContextAccessor httpContext)
         {
-            _user = user;
+            _user = httpContext.HttpContext.User;
             _mapper = mapper;
             _context = context;
             _hubContext = hubContext;
@@ -69,10 +70,10 @@ namespace Webshop.Api.Services
             return viewModel;
         }
 
-        public async Task RemoveWishlistItem(int reviewId, CancellationToken cancellationToken = default)
+        public async Task RemoveWishlistItem(int wishlistItemId, CancellationToken cancellationToken = default)
         {
             WishlistItem item = await _context.WishlistItems
-                .SingleOrDefaultAsync(wi => wi.WishlistItemId == reviewId, cancellationToken);
+                .SingleOrDefaultAsync(wi => wi.WishlistItemId == wishlistItemId, cancellationToken);
 
             _context.Remove(item);
             await _context.SaveChangesAsync(cancellationToken);

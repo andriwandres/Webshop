@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -25,9 +26,9 @@ namespace Webshop.Api.Services
         private readonly ClaimsPrincipal _user;
         private readonly IHubContext<WebshopHub> _hubContext;
 
-        public OrderService(IMapper mapper, WebshopContext context, AuthService authService, IHubContext<WebshopHub> hubContext, ClaimsPrincipal user)
+        public OrderService(IMapper mapper, WebshopContext context, AuthService authService, IHubContext<WebshopHub> hubContext, IHttpContextAccessor httpContext)
         {
-            _user = user;
+            _user = httpContext.HttpContext.User;
             _mapper = mapper;
             _context = context;
             _hubContext = hubContext;

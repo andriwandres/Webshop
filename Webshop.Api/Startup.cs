@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +15,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Webshop.Api.Configuration.Settings;
@@ -130,8 +132,8 @@ namespace Webshop.Api
                 options.IncludeXmlComments(xmlPath);
             });
 
-            // Add User Claimsprincipal to Service Collection
-            services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
+            // Add HTTP Context Accessor for accessing logged in user
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Add Custom Services
             services.AddScoped<CryptoService>();
@@ -140,6 +142,7 @@ namespace Webshop.Api
             services.AddScoped<OrderService>();
             services.AddScoped<ReviewService>();
             services.AddScoped<WishlistService>();
+            services.AddScoped<CartService>();
 
             // Add Cross-Origin-Resource-Sharing
             services.AddCors();

@@ -1,11 +1,17 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import { ProductListing } from 'src/models/products/productListing';
+import { CartItem } from 'src/models/cart/cart-item';
 
-export interface State extends EntityState<ProductListing> { }
+export interface State extends EntityState<CartItem> {
+  isLoading: boolean;
+  error: any;
+}
 
-export const cartAdapter = createEntityAdapter<ProductListing>({
-  selectId: (product) => product.productId,
-  sortComparer: (a, b) => a.productId - b.productId,
+export const cartAdapter = createEntityAdapter<CartItem>({
+  selectId: (product) => product.cartItemId,
+  sortComparer: (a, b) => a.cartItemId - b.cartItemId,
 });
 
-export const initialState: State = cartAdapter.getInitialState();
+export const initialState: State = cartAdapter.getInitialState({
+  isLoading: false,
+  error: null
+});
