@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Webshop.Api.Models.Dto.Product;
@@ -99,6 +100,17 @@ namespace Webshop.Api.Controllers
             ProductDetailViewModel product = await _productService.GetProductDetails(productId, cancellationToken);
 
             return Ok(product);
+        }
+
+        [HttpPost("Upload")]
+        [AllowAnonymous]
+        public async Task<ActionResult> Upload(IFormFile file)
+        {
+            using(var stream = new MemoryStream())
+            {
+                await file.CopyToAsync(stream);
+            }
+            return NoContent();
         }
     }
 }

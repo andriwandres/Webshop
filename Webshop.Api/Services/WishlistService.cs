@@ -50,7 +50,6 @@ namespace Webshop.Api.Services
         public async Task<WishlistItemViewModel> AddWishlistItem(int productId, CancellationToken cancellationToken = default)
         {
             Product product = await _context.Products
-                .AsNoTracking()
                 .Include(p => p.Images)
                 .SingleOrDefaultAsync(p => p.ProductId == productId, cancellationToken);
 

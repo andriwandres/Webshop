@@ -16,6 +16,6 @@
 <span id="description"> {{ product.description }} </span>
 
 <div class="actions">
-  <button id="add-to-cart-button"> Add to Cart </button>
-  <button id="add-to-wishlist-button"> Add to Wishlist </button>
+  <button id="add-to-cart-button" (click)="addToCart.emit()">Add to Cart</button>
+  <button id="add-to-wishlist-button" (click)="addToWishlist.emit()"> Add to Wishlist </button>
 </div>

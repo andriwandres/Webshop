@@ -10,6 +10,6 @@ import { ProductDetails } from 'src/models/products/productDetails';
 export class ProductDescriptionComponent {
   @Input() product: ProductDetails;
 
-  @Output() addToCart = new EventEmitter<number>();
-  @Output() addToWishlist = new EventEmitter<number>();
+  @Output() addToCart = new EventEmitter<void>();
+  @Output() addToWishlist = new EventEmitter<void>();
 }

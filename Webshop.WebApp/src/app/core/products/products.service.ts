@@ -5,7 +5,7 @@ import { retry } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ProductDetails } from 'src/models/products/productDetails';
 import { ProductListing } from 'src/models/products/productListing';
-import { ProductQuery, SortCriteria } from 'src/models/products/productQuery';
+import { ProductQuery } from 'src/models/products/productQuery';
 
 @Injectable({ providedIn: 'root' })
 export class ProductsService {

@@ -1,10 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { select, Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { select, Store, ActionsSubject } from '@ngrx/store';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import { AppStoreState } from 'src/app/app-store';
 import { ProductStoreActions, ProductStoreSelectors } from 'src/app/app-store/products-store';
+import { CartStoreActions, CartStoreSelectors } from 'src/app/app-store/cart-store';
+import { WishlistStoreActions } from 'src/app/app-store/wishlist-store';
+import { ofType } from '@ngrx/effects';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-product-details',
@@ -20,6 +24,9 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   );
 
   constructor(
+    private readonly router: Router,
+    private readonly snackbar: MatSnackBar,
+    private readonly actionsSubject: ActionsSubject,
     private readonly activatedRoute: ActivatedRoute,
     private readonly store$: Store<AppStoreState.State>,
   ) { }
@@ -35,11 +42,34 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  onAddToCart(id: number): void {
-    console.log(id);
+  onAddToCart(productId: number): void {
+    this.actionsSubject.pipe(
+      ofType(CartStoreActions.addCartItemSuccess),
+      take(1),
+    ).subscribe(() => {
+      this.snackbar.open('Product was added to your cart', '', {
+        duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'right',
+      });
+      this.router.navigate(['/products']);
+    });
+
+    this.store$.dispatch(CartStoreActions.addCartItem({ productId }));
   }
 
-  onAddToWishlist(id: number): void {
-    console.log(id);
+  onAddToWishlist(productId: number): void {
+    this.actionsSubject.pipe(
+      ofType(WishlistStoreActions.addWishlistItemSuccess),
+      take(1),
+    ).subscribe(() => {
+      this.snackbar.open('Product was added to your wishlist', '', {
+        duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'right',
+      });
+    });
+
+    this.store$.dispatch(WishlistStoreActions.addWishlistItem({ productId }));
   }
 }

@@ -8,8 +8,8 @@
     <app-image-gallery></app-image-gallery>
     <app-product-description
       [product]="product"
-      (addToCart)="onAddToCart()"
-      (addToWishlist)="onAddToWishlist()">
+      (addToCart)="onAddToCart(product.productId)"
+      (addToWishlist)="onAddToWishlist(product.productId)">
     </app-product-description>
   </div>
 </div>
