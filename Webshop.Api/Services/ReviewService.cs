@@ -67,7 +67,7 @@ namespace Webshop.Api.Services
             return viewModel;
         }
 
-        public async Task EditReview(int reviewId, ReviewDto model, CancellationToken cancellationToken = default)
+        public async Task<ReviewViewModel> EditReview(int reviewId, ReviewDto model, CancellationToken cancellationToken = default)
         {
             Review review = await _context.Reviews
                 .SingleOrDefaultAsync(r => r.ReviewId == reviewId);
@@ -82,9 +82,11 @@ namespace Webshop.Api.Services
             ReviewViewModel viewModel = _mapper.Map<Review, ReviewViewModel>(review);
 
             await _hubContext.Clients.All.SendAsync(SignalREvents.UpdateReview, viewModel, cancellationToken);
+
+            return viewModel;
         }
 
-        public async Task DeleteReview(int reviewId, CancellationToken cancellationToken = default)
+        public async Task<int> DeleteReview(int reviewId, CancellationToken cancellationToken = default)
         {
             Review review = await _context.Reviews
                 .SingleOrDefaultAsync(r => r.ReviewId == reviewId, cancellationToken);
@@ -95,6 +97,8 @@ namespace Webshop.Api.Services
             await _context.SaveChangesAsync(cancellationToken);
 
             await _hubContext.Clients.All.SendAsync(SignalREvents.DeleteReview, reviewId, cancellationToken);
+
+            return reviewId;
         }
 
         public async Task<bool> ReviewExists(int reviewId, CancellationToken cancellationToken = default)

@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { AuthStoreModule } from './auth-store';
 import { CartStoreModule } from './cart-store';
 import { ProductsStoreModule } from './products-store';
+import { ReviewStoreModule } from './review-store';
 import { WishlistStoreModule } from './wishlist-store';
 
 @NgModule({
@@ -14,7 +15,7 @@ import { WishlistStoreModule } from './wishlist-store';
     CartStoreModule,
     ProductsStoreModule,
     WishlistStoreModule,
-
+    ReviewStoreModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({

@@ -24,15 +24,15 @@ export class ReviewsService {
     return this.http.post<Review>(url, review);
   }
 
-  editReview(reviewId: number, review: ReviewDto): Observable<void> {
+  editReview(reviewId: number, review: ReviewDto): Observable<Review> {
     const url = `${environment.api.review}/EditReview/${reviewId}`;
 
-    return this.http.post<void>(url, review);
+    return this.http.post<Review>(url, review);
   }
 
-  deleteReview(reviewId: number): Observable<void> {
+  deleteReview(reviewId: number): Observable<number> {
     const url = `${environment.api.review}/DeleteReview/${reviewId}`;
 
-    return this.http.delete<void>(url);
+    return this.http.delete<number>(url);
   }
 }

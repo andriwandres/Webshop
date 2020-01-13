@@ -127,10 +127,10 @@ namespace Webshop.Api.Controllers
         ///     Token for cancelling the request. This token is provided by the framework itself
         /// </param>
         /// <returns>
-        ///     The updated reviews
+        ///     The updated review
         /// </returns>
         /// <response code="204">
-        ///     Edit of review was successfull
+        ///     Edit of review was successfull. Review is returned
         /// </response>
         /// <response code="400">
         ///     If validation fails
@@ -147,7 +147,7 @@ namespace Webshop.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> EditReview([FromRoute] int id, [FromBody] ReviewDto model, CancellationToken cancellationToken)
+        public async Task<ActionResult<ReviewViewModel>> EditReview([FromRoute] int id, [FromBody] ReviewDto model, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -168,13 +168,13 @@ namespace Webshop.Api.Controllers
                 return Unauthorized();
             }
 
-            await _reviewService.EditReview(id, model, cancellationToken);
+            ReviewViewModel review = await _reviewService.EditReview(id, model, cancellationToken);
 
-            return NoContent();
+            return Ok(review);
         }
 
         /// <summary>
-        ///     Deletes a review to a product
+        ///     Deletes a review to a product and returns its ID number
         /// </summary>
         /// <param name="id">
         ///     ID number of review to delete
@@ -183,10 +183,10 @@ namespace Webshop.Api.Controllers
         ///     Token for cancelling the request. This token is provided by the framework itself
         /// </param>
         /// <returns>
-        ///     No content
+        ///     ID number of removed entity
         /// </returns>
-        /// <response code="204">
-        ///     Deletion of review was successfull
+        /// <response code="200">
+        ///     Deletion of review was successfull. ID number is returned
         /// </response>
         /// <response code="400">
         ///     If validation fails
@@ -203,7 +203,7 @@ namespace Webshop.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> DeleteReview([FromRoute] int id, CancellationToken cancellationToken)
+        public async Task<ActionResult<int>> DeleteReview([FromRoute] int id, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -226,7 +226,7 @@ namespace Webshop.Api.Controllers
 
             await _reviewService.DeleteReview(id, cancellationToken);
 
-            return NoContent();
+            return Ok(id);
         }
     }
 }
