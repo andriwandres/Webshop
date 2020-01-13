@@ -6,10 +6,13 @@
 
   <div id="product" *ngIf="product$ | async as product">
     <app-image-gallery></app-image-gallery>
+
     <app-product-description
       [product]="product"
       (addToCart)="onAddToCart(product.productId)"
       (addToWishlist)="onAddToWishlist(product.productId)">
     </app-product-description>
+
+    <app-reviews></app-reviews>
   </div>
 </div>
