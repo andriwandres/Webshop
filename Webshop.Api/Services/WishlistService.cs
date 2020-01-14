@@ -82,5 +82,12 @@ namespace Webshop.Api.Services
         {
             return await _context.WishlistItems.AnyAsync(wi => wi.WishlistItemId == itemId, cancellationToken);
         }
+
+        public async Task<bool> IsInWishlist(int itemId, CancellationToken cancellationToken = default)
+        {
+            AppUser user = await _authService.GetUser(_user, cancellationToken);
+
+            return await _context.WishlistItems.AnyAsync(wi => wi.UserId == user.UserId && wi.WishlistItemId == itemId, cancellationToken);
+        }
     }
 }

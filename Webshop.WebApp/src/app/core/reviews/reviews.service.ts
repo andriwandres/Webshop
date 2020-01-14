@@ -31,7 +31,7 @@ export class ReviewsService {
   }
 
   deleteReview(reviewId: number): Observable<number> {
-    const url = `${environment.api.review}/DeleteReview/${reviewId}`;
+    const url = `${environment.api.review}/RemoveReview/${reviewId}`;
 
     return this.http.delete<number>(url);
   }

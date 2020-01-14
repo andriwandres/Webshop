@@ -12,8 +12,6 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./reviews.component.scss']
 })
 export class ReviewsComponent implements OnInit, OnDestroy {
-  @Input() productId: number;
-
   private readonly destroy$ = new Subject<void>();
 
   readonly reviews$ = this.store$.pipe(
@@ -21,10 +19,13 @@ export class ReviewsComponent implements OnInit, OnDestroy {
     takeUntil(this.destroy$),
   );
 
-  constructor(private readonly store$: Store<AppStoreState.State>) { }
+  constructor(
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly store$: Store<AppStoreState.State>,
+  ) { }
 
   ngOnInit(): void {
-    const productId = this.productId;
+    const productId = +this.activatedRoute.snapshot.paramMap.get('id');
 
     this.store$.dispatch(ReviewStoreActions.loadReviews({ productId }));
   }

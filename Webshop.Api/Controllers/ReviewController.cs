@@ -129,7 +129,7 @@ namespace Webshop.Api.Controllers
         /// <returns>
         ///     The updated review
         /// </returns>
-        /// <response code="204">
+        /// <response code="200">
         ///     Edit of review was successfull. Review is returned
         /// </response>
         /// <response code="400">
@@ -143,7 +143,7 @@ namespace Webshop.Api.Controllers
         /// </response>
         [Authorize]
         [HttpPut("EditReview/{id:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -198,12 +198,12 @@ namespace Webshop.Api.Controllers
         ///     If given review doesn't exist
         /// </response>
         [Authorize]
-        [HttpDelete("DeleteReview/{id:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [HttpDelete("RemoveReview/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<int>> DeleteReview([FromRoute] int id, CancellationToken cancellationToken)
+        public async Task<ActionResult<int>> RemoveReview([FromRoute] int id, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {

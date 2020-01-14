@@ -204,10 +204,10 @@
                 Token for cancelling the request. This token is provided by the framework itself
             </param>
             <returns>
-                The updated reviews
+                The updated review
             </returns>
-            <response code="204">
-                Edit of review was successfull
+            <response code="200">
+                Edit of review was successfull. Review is returned
             </response>
             <response code="400">
                 If validation fails
@@ -219,9 +219,9 @@
                 If give review doesn't exist
             </response>
         </member>
-        <member name="M:Webshop.Api.Controllers.ReviewController.DeleteReview(System.Int32,System.Threading.CancellationToken)">
+        <member name="M:Webshop.Api.Controllers.ReviewController.RemoveReview(System.Int32,System.Threading.CancellationToken)">
             <summary>
-                Deletes a review to a product
+                Deletes a review to a product and returns its ID number
             </summary>
             <param name="id">
                 ID number of review to delete
@@ -230,10 +230,10 @@
                 Token for cancelling the request. This token is provided by the framework itself
             </param>
             <returns>
-                No content
+                ID number of removed entity
             </returns>
-            <response code="204">
-                Deletion of review was successfull
+            <response code="200">
+                Deletion of review was successfull. ID number is returned
             </response>
             <response code="400">
                 If validation fails

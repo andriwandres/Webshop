@@ -52,6 +52,13 @@ namespace Webshop.Api.Controllers
                 return NotFound();
             }
 
+            bool productInCart = await _cartService.IsInCart(productId, cancellationToken);
+
+            if (productInCart)
+            {
+                return BadRequest();
+            }
+
             CartItemViewModel cartItem = await _cartService.AddCartItem(productId, cancellationToken);
 
             return Ok(cartItem);

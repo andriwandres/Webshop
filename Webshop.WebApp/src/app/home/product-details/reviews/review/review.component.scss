@@ -1,0 +1,22 @@
+:host {
+  padding: 20px;
+  border: 1px solid #ddd;
+}
+
+#header {
+  display: flex;
+
+  #author {
+    margin: 0 20px;
+  }
+
+  #created {
+    font-weight: 300;
+    font-size: 14px;
+  }
+}
+
+#body {
+  font-style: italic;
+  font-weight: 300;
+}

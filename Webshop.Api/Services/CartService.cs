@@ -75,5 +75,12 @@ namespace Webshop.Api.Services
         {
             return await _context.CartItems.AnyAsync(ci => ci.CartItemId == cartItemId, cancellationToken);
         }
+
+        public async Task<bool> IsInCart(int productId, CancellationToken cancellationToken = default)
+        {
+            AppUser user = await _authService.GetUser(_user, cancellationToken);
+
+            return await _context.CartItems.AnyAsync(ci => ci.UserId == user.UserId && ci.ProductId == productId, cancellationToken); 
+        }
     }
 }
