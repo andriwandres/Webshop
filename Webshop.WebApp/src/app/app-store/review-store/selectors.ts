@@ -1,4 +1,4 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector, props } from '@ngrx/store';
 import * as appState from '../state';
 import * as reviewState from './state';
 import { selectAuthFeature } from '../auth-store/selectors';
@@ -22,3 +22,9 @@ export const {
   selectIds,
   selectTotal,
 } = reviewState.reviewAdapter.getSelectors(selectReviewFeature);
+
+export const selectHasAlreadyReviewed = createSelector(
+  selectAll,
+  selectAuthFeature,
+  (all, authState) => all.some(r => r.userId === authState.user.userId),
+);

@@ -4,6 +4,10 @@
 </div>
 
 <div id="actions">
+  <ng-container *ngIf="user$ | async as user">
+    <span id="logged-in-user">Logged in as {{ user.firstname }} {{ user.lastname }}</span>
+  </ng-container>
+
   <button mat-icon-button matTooltip="Cart" matTooltipShowDelay="300" matTooltipPosition="below" [matMenuTriggerFor]="cart.menu">
     <mat-icon>shopping_cart</mat-icon>
   </button>
@@ -14,6 +18,7 @@
 
   <app-cart #cart></app-cart>
   <app-wishlist #wishlist></app-wishlist>
+  <app-user-actions #userActions></app-user-actions>
 
-  <div id="avatar"></div>
+  <div id="avatar" [matMenuTriggerFor]="userActions.menu"></div>
 </div>

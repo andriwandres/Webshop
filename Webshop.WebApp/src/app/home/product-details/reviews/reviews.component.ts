@@ -2,13 +2,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, tap } from 'rxjs/operators';
 import { AppStoreState } from 'src/app/app-store';
 import { ReviewStoreActions, ReviewStoreSelectors } from 'src/app/app-store/review-store';
 import { MatDialog } from '@angular/material/dialog';
 import { ReviewCreateComponent } from './review-create/review-create.component';
 import { Review } from 'src/models/reviews/review';
 import { ReviewDto } from 'src/models/reviews/review-dto';
+import { AuthStoreSelectors } from 'src/app/app-store/auth-store';
 
 @Component({
   selector: 'app-reviews',
@@ -21,6 +22,17 @@ export class ReviewsComponent implements OnInit, OnDestroy {
   readonly reviews$ = this.store$.pipe(
     select(ReviewStoreSelectors.selectAll),
     takeUntil(this.destroy$),
+  );
+
+  readonly hasAlreadyReviewed$ = this.store$.pipe(
+    select(ReviewStoreSelectors.selectHasAlreadyReviewed),
+    takeUntil(this.destroy$)
+  );
+
+  readonly user$ = this.store$.pipe(
+    select(AuthStoreSelectors.selectUser),
+    takeUntil(this.destroy$),
+    tap(console.log)
   );
 
   constructor(
@@ -52,5 +64,9 @@ export class ReviewsComponent implements OnInit, OnDestroy {
         this.store$.dispatch(ReviewStoreActions.createReview({ productId, review }));
       }
     });
+  }
+
+  deleteReview(reviewId: number): void {
+    this.store$.dispatch(ReviewStoreActions.removeReview({ reviewId }));
   }
 }

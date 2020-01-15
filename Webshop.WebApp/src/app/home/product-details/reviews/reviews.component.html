@@ -6,13 +6,15 @@
       <span id="reviews-count">({{ reviews.length }})</span>
     </div>
 
-    <button (click)="createReview()" mat-icon-button matTooltip="Write a review" matTooltipShowDelay="300">
+    <button *ngIf="(user$ | async) && !(hasAlreadyReviewed$ | async)" (click)="createReview()" mat-icon-button matTooltip="Write a review" matTooltipShowDelay="300">
       <mat-icon>add</mat-icon>
     </button>
   </div>
 
   <app-review
     *ngFor="let review of reviews"
-    [review]="review">
+    [review]="review"
+    [isOwnReview]="(user$ | async).userId === review.userId"
+    (deleteReview)="deleteReview(review.reviewId)">
   </app-review>
 </ng-container>

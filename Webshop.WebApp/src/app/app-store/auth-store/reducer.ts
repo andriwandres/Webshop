@@ -6,6 +6,32 @@ import { AppUser } from 'src/models/auth/user';
 const reducer = createReducer(
   initialState,
 
+  // Authenticate
+  on(authActions.authenticate, (state) => {
+    return {
+      ...state,
+      isLoading: true,
+      error: null,
+    };
+  }),
+  on(authActions.authenticateSuccess, (state, { user }) => {
+    localStorage.setItem('token', user.token);
+
+    return {
+      ...state,
+      isLoading: false,
+      token: user.token,
+      user: user as AppUser,
+    };
+  }),
+  on(authActions.authenticateFailure, (state, { error }) => {
+    return {
+      ...state,
+      isLoading: false,
+      error: null,
+    };
+  }),
+
   // Login
   on(authActions.login, (state) => {
     return {

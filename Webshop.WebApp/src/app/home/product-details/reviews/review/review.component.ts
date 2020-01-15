@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Review } from 'src/models/reviews/review';
 
 @Component({
@@ -8,4 +8,7 @@ import { Review } from 'src/models/reviews/review';
 })
 export class ReviewComponent {
   @Input() review: Review;
+  @Input() isOwnReview: boolean;
+
+  @Output() deleteReview = new EventEmitter<void>();
 }

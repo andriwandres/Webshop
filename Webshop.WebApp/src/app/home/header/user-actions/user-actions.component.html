@@ -1,0 +1,5 @@
+<mat-menu id="menu" [overlapTrigger]="false" (click)="$event.stopPropagation()">
+  <span id="title">Aktionen</span>
+
+  <button (click)="logout()" mat-menu-item>Log Out</button>
+</mat-menu>

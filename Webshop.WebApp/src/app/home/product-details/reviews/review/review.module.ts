@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReviewComponent } from './review.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [ReviewComponent],
@@ -10,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
     CommonModule,
     MatIconModule,
     MatButtonModule,
+    MatTooltipModule,
   ],
   exports: [ReviewComponent]
 })

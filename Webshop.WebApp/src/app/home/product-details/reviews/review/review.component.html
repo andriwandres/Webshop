@@ -14,3 +14,7 @@
 <div id="body">
   {{ review.body }}
 </div>
+
+<button *ngIf="isOwnReview" mat-icon-button id="delete-button" matTooltip="Delete Review" matTooltipShowDelay="300" (click)="deleteReview.emit()">
+  <mat-icon>close</mat-icon>
+</button>

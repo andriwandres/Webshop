@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from './header.component';
+import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CartModule } from './cart/cart.module';
+import { HeaderComponent } from './header.component';
+import { UserActionsModule } from './user-actions/user-actions.module';
 import { WishlistModule } from './wishlist/wishlist.module';
 
 @NgModule({
@@ -18,6 +19,7 @@ import { WishlistModule } from './wishlist/wishlist.module';
     MatTooltipModule,
     CartModule,
     WishlistModule,
+    UserActionsModule
   ],
   exports: [HeaderComponent]
 })

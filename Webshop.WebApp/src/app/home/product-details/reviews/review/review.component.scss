@@ -2,6 +2,7 @@
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 3px;
+  position: relative;
 }
 
 #header {
@@ -20,4 +21,10 @@
 #body {
   font-style: italic;
   font-weight: 300;
+}
+
+#delete-button {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
