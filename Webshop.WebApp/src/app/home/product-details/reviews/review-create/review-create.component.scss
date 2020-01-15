@@ -1,0 +1,20 @@
+
+#star-rating {
+  .star {
+    cursor: pointer;
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+#submit-button {
+  color: white;
+  background-color: #4B71BB;
+}
+
+.disabled {
+  color: rgba(0,0,0,.26) !important;
+  background-color: rgba(0,0,0,.12) !important;
+}

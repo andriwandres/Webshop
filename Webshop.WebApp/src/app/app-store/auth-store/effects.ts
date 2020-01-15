@@ -7,6 +7,14 @@ import * as authActions from './actions';
 
 @Injectable()
 export class AuthEffects {
+  readonly authenticate$ = createEffect(() => this.actions$.pipe(
+    ofType(authActions.authenticate),
+    switchMap(() => this.authService.authenticate().pipe(
+      map(user => authActions.authenticateSuccess({ user })),
+      catchError(error => of(authActions.authenticateFailure({ error }))),
+    ))
+  ));
+
   readonly login$ = createEffect(() => this.actions$.pipe(
     ofType(authActions.login),
     exhaustMap(action => this.authService.login(action.credentials).pipe(

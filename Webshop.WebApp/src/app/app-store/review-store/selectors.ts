@@ -1,6 +1,7 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import * as appState from '../state';
 import * as reviewState from './state';
+import { selectAuthFeature } from '../auth-store/selectors';
 
 export const reviewFeatureKey = 'review';
 export const selectReviewFeature = createFeatureSelector<appState.State, reviewState.State>(reviewFeatureKey);

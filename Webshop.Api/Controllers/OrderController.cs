@@ -74,6 +74,7 @@ namespace Webshop.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<OrderViewModel>> PlaceOrder([FromBody] OrderDto model, CancellationToken cancellationToken)
         {
+            // TODO Replace with checkout
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

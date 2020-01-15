@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
+using Webshop.Api.Models.Domain;
 using Webshop.Api.Models.Dto.User;
 using Webshop.Api.Models.ViewModel.User;
 using Webshop.Api.Services;
@@ -20,6 +21,16 @@ namespace Webshop.Api.Controllers
         public AuthController(AuthService authService)
         {
             _authService = authService;
+        }
+
+        [Authorize]
+        [HttpGet("Authenticate")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<AuthenticatedUser>> Authenticate(CancellationToken cancellationToken)
+        {
+            AuthenticatedUser user = await _authService.Authenticate(User, cancellationToken);
+
+            return Ok(user);
         }
 
         /// <summary>

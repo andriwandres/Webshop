@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading;
@@ -22,13 +24,29 @@ namespace Webshop.Api.Services
         private readonly WebshopContext _context;
         private readonly JwtSettings _jwtSettings;
         private readonly CryptoService _cryptoService;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public AuthService(WebshopContext context, CryptoService cryptoService, IMapper mapper, IOptions<JwtSettings> jwtSettings)
+        public AuthService(WebshopContext context, CryptoService cryptoService, IMapper mapper, IOptions<JwtSettings> jwtSettings, IHttpContextAccessor httpContext)
         {
             _mapper = mapper;
             _context = context;
+            _httpContext = httpContext;
             _cryptoService = cryptoService;
             _jwtSettings = jwtSettings.Value;
+        }
+
+        public async Task<AuthenticatedUser> Authenticate(ClaimsPrincipal principal, CancellationToken cancellationToken = default)
+        {
+            AppUser user = await GetUser(principal, cancellationToken);
+
+            string token = _httpContext.HttpContext.Request.Headers["Authorization"].ToString().Split(" ").Last();
+
+            AuthenticatedUser viewModel = _mapper.Map<AppUser, AuthenticatedUser>(user, options =>
+            {
+                options.Items["Token"] = token;
+            });
+
+            return viewModel;
         }
 
         public async Task<AppUser> GetUser(ClaimsPrincipal principal, CancellationToken cancellationToken = default)

@@ -11,6 +11,12 @@ import { retry } from 'rxjs/operators';
 export class AuthService {
   constructor(private readonly http: HttpClient) { }
 
+  authenticate(): Observable<AuthenticatedUser> {
+    const url = `${environment.api.auth}/Authenticate`;
+
+    return this.http.get<AuthenticatedUser>(url);
+  }
+
   login(model: LoginDto): Observable<AuthenticatedUser> {
     const url = `${environment.api.auth}/Login`;
 

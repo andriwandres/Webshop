@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Write a Review</h2>
+
+<mat-dialog-content>
+  <div id="star-rating">
+    <mat-icon class="star" *ngFor="let i of [1, 2, 3, 4, 5]" (click)="rate(i)">
+      {{ stars.value >= i ? 'star' : 'star_border' }}
+    </mat-icon>
+  </div>
+
+  <form [formGroup]="form">
+    <mat-form-field>
+      <textarea formControlName="body" matInput placeholder="Your Review..."></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button id="cancel-button" mat-button [mat-dialog-close]="false">Cancel</button>
+  <button
+    id="submit-button"
+    [ngClass]="{ disabled: form.invalid }"
+    (click)="submit()"
+    mat-raised-button
+    [disabled]="form.invalid">
+    Submit
+  </button>
+</mat-dialog-actions>
