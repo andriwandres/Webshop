@@ -85,6 +85,16 @@ namespace Webshop.Api.Services
             return product;
         }
 
+        public async Task Upload(string file)
+        {
+            ProductImage image = await _context.ProductImages.SingleOrDefaultAsync(pi => pi.ProductImageId == 1);
+
+            image.Image = file;
+
+            _context.ProductImages.Update(image);
+            await _context.SaveChangesAsync();
+        }
+            
         public async Task<bool> ProductExists(int productId, CancellationToken cancellationToken = default)
         {
             return await _context.Products.AnyAsync(p => p.ProductId == productId, cancellationToken);

@@ -9,4 +9,8 @@ import { ProductListing } from 'src/models/products/productListing';
 })
 export class ProductComponent {
   @Input() product: ProductListing;
+
+  get imageBase64(): string {
+    return `data:image/webp;base64, ${this.product.image}`;
+  }
 }

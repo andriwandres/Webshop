@@ -9,6 +9,6 @@ namespace Webshop.Api.Models.ViewModel.Product
         public int Quantity { get; set; }
         public float AverageStars { get; set; }
         public int ReviewsCount { get; set; }
-        public byte[] Image { get; set; }
+        public string Image { get; set; }
     }
 }

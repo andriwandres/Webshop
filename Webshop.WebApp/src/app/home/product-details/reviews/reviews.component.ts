@@ -32,7 +32,6 @@ export class ReviewsComponent implements OnInit, OnDestroy {
   readonly user$ = this.store$.pipe(
     select(AuthStoreSelectors.selectUser),
     takeUntil(this.destroy$),
-    tap(console.log)
   );
 
   constructor(
@@ -60,7 +59,7 @@ export class ReviewsComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((review: ReviewDto) => {
       if (!!review) {
         const productId = +this.activatedRoute.snapshot.paramMap.get('id');
-        console.log('dispatch');
+
         this.store$.dispatch(ReviewStoreActions.createReview({ productId, review }));
       }
     });

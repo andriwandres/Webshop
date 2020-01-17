@@ -12,7 +12,7 @@ namespace Webshop.Api.Models.Domain
         public int ProductId { get; set; }
 
         [Required]
-        public byte[] Image { get; set; }
+        public string Image { get; set; }
 
         public string Description { get; set; }
 

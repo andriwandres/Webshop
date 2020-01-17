@@ -1,5 +1,5 @@
 
 export interface ProductImage {
-  image: Blob;
+  image: string;
   description?: string;
 }

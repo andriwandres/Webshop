@@ -6,5 +6,5 @@ export interface ProductListing {
   quantity: number;
   averageStars: number;
   reviewsCount: number;
-  image?: Blob;
+  image?: string;
 }

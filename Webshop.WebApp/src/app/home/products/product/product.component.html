@@ -1,7 +1,5 @@
 
-<div id="image">
-
-</div>
+<img id="image" [src]="imageBase64 | safeUrl" *ngIf="product.image">
 
 <div id="product-information">
   <span id="price">{{ product.price }}</span>

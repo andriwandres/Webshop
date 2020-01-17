@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -109,7 +110,12 @@ namespace Webshop.Api.Controllers
             using(var stream = new MemoryStream())
             {
                 await file.CopyToAsync(stream);
+                byte[] bytes = stream.ToArray();
+                string base64 = Convert.ToBase64String(bytes);
+
+                await _productService.Upload(base64);
             }
+
             return NoContent();
         }
     }
