@@ -17,5 +17,6 @@ namespace Webshop.Api.Database
         public DbSet<Review> Reviews { get; set; }
         public DbSet<WishlistItem> WishlistItems { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<PaymentMethod> PaymentMethods { get; set; }
     }
 }

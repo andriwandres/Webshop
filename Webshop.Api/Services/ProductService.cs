@@ -100,11 +100,11 @@ namespace Webshop.Api.Services
             return await _context.Products.AnyAsync(p => p.ProductId == productId, cancellationToken);
         }
 
-        public async Task<bool> HasQuantity(OrderDto order, CancellationToken cancellationToken = default)
+        public async Task<bool> HasQuantity(int productId, int quantity, CancellationToken cancellationToken = default)
         {
-            Product product = await _context.Products.SingleOrDefaultAsync(p => p.ProductId == order.ProductId, cancellationToken);
+            Product product = await _context.Products.SingleOrDefaultAsync(p => p.ProductId == productId, cancellationToken);
             
-            return product.Quantity > order.Quantity;
+            return product.Quantity > quantity;
         }
     }
 }

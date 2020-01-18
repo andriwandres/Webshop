@@ -16,6 +16,9 @@ namespace Webshop.Api.Models.Domain
         public int ProductId { get; set; }
 
         [Required]
+        public int PaymentMethodId { get; set; }
+
+        [Required]
         public int Quantity { get; set; }
 
         [Required]
@@ -28,6 +31,9 @@ namespace Webshop.Api.Models.Domain
 
         [ForeignKey(nameof(ProductId))]
         public Product Product { get; set; }
+
+        [ForeignKey(nameof(PaymentMethodId))]
+        public PaymentMethod PaymentMethod { get; set; }
 
         #endregion
     }

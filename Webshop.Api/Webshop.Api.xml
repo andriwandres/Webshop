@@ -78,9 +78,9 @@
                 Returns list of orders
             </response>
         </member>
-        <member name="M:Webshop.Api.Controllers.OrderController.PlaceOrder(Webshop.Api.Models.Dto.Order.OrderDto,System.Threading.CancellationToken)">
+        <member name="M:Webshop.Api.Controllers.OrderController.Checkout(Webshop.Api.Models.Dto.Order.OrderDto,System.Threading.CancellationToken)">
             <summary>
-                Places an order for a product to a given quantity
+                Checks out the users cart and places orders accordingly
             </summary>
             <param name="model">
                 Information for Order to be placed

@@ -47,10 +47,10 @@ namespace Webshop.Api.Controllers
         }
 
         /// <summary>
-        ///     Places an order for a product to a given quantity
+        ///     Checks out the users cart and places orders accordingly
         /// </summary>
         /// <param name="model">
-        ///     Information for Order to be placed
+        ///     Payment method information
         /// </param>
         /// <param name="cancellationToken">
         ///     Token for cancelling the request. This token is provided by the framework itself
@@ -62,41 +62,22 @@ namespace Webshop.Api.Controllers
         ///     Returns the created order
         /// </response>
         /// <response code="400">
-        ///     If validation fails or order quantity exceeds stock quantity
-        /// </response>
-        /// <response code="404">
-        ///     If given product doesn't exist
+        ///     If validation fails
         /// </response>
         [Authorize]
-        [HttpPost("PlaceOrder")]
+        [HttpPost("Checkout")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<OrderViewModel>> PlaceOrder([FromBody] OrderDto model, CancellationToken cancellationToken)
+        public async Task<ActionResult<OrderViewModel>> Checkout([FromBody] OrderDto model, CancellationToken cancellationToken)
         {
-            // TODO Replace with checkout
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool productExists = await _productService.ProductExists(model.ProductId, cancellationToken);
+            IEnumerable<OrderViewModel> orders = await _orderService.Checkout(model, cancellationToken);
 
-            if (!productExists)
-            {
-                return NotFound();
-            }
-
-            bool hasQuantity = await _productService.HasQuantity(model, cancellationToken);
-
-            if (!hasQuantity)
-            {
-                return BadRequest();
-            }
-
-            OrderViewModel order = await _orderService.PlaceOrder(model, cancellationToken);
-
-            return Ok(order);
+            return Ok(orders);
         }
     }
 }

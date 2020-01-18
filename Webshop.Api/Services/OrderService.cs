@@ -48,32 +48,41 @@ namespace Webshop.Api.Services
             return orders;
         }
 
-        public async Task<OrderViewModel> PlaceOrder(OrderDto model, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<OrderViewModel>> Checkout(OrderDto model, CancellationToken cancellationToken = default)
         {
-            Product product = await _context.Products
-                .Include(p => p.Images)
-                .SingleOrDefaultAsync(p => p.ProductId == model.ProductId, cancellationToken);
-
             AppUser user = await _authService.GetUser(_user, cancellationToken);
 
-            Order order = new Order
+            IQueryable<CartItem> cart = _context.CartItems
+                .Include(ci => ci.Product)
+                .ThenInclude(p => p.Images)
+                .Where(ci => ci.UserId == user.UserId);
+           
+            IQueryable<Order> orders = cart.ProjectTo<Order>(_mapper.ConfigurationProvider);
+
+            PaymentMethod paymentMethod = await _context.PaymentMethods
+                .SingleOrDefaultAsync(pm => pm.PaymentMethodId == model.PaymentMethodId, cancellationToken);
+
+            foreach (Order order in orders)
             {
-                User = user,
-                Product = product,
-                Quantity = model.Quantity,
-                CreatedAt = DateTime.Now,
-            };
+                order.PaymentMethod = paymentMethod;
+            }
 
-            product.Quantity -= model.Quantity;
+            foreach (CartItem cartItem in cart)
+            {
+                cartItem.Product.Quantity -= cartItem.Quantity;
+            }
 
-            await _context.Orders.AddAsync(order, cancellationToken);
+            await _context.Orders.AddRangeAsync(orders, cancellationToken);
+
+            _context.RemoveRange(cart);
+
             await _context.SaveChangesAsync(cancellationToken);
 
-            OrderViewModel viewModel = _mapper.Map<Order, OrderViewModel>(order);
+            IEnumerable<OrderViewModel> viewModels = await orders
+                .ProjectTo<OrderViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
 
-            await _hubContext.Clients.All.SendAsync(SignalREvents.ReduceQuantity, model, cancellationToken);
-
-            return viewModel;
+            return viewModels;
         }
     }
 }
