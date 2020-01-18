@@ -11,6 +11,7 @@ export const environment = {
     order: 'http://localhost:49908/api/Order',
     review: 'http://localhost:49908/api/Review',
     wishlist: 'http://localhost:49908/api/Wishlist',
+    paymentMethod: 'http://localhost:49908/api/PaymentMethod',
   }
 };
 

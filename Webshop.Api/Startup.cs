@@ -143,6 +143,7 @@ namespace Webshop.Api
             services.AddScoped<ReviewService>();
             services.AddScoped<WishlistService>();
             services.AddScoped<CartService>();
+            services.AddScoped<PaymentMethodService>();
 
             // Add Cross-Origin-Resource-Sharing
             services.AddCors();
