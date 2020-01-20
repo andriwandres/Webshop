@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Webshop.Api.Migrations;
+using Webshop.Api.Models.Domain;
 using Webshop.Api.Models.ViewModel.PaymentMethod;
 
 namespace Webshop.Api.Configuration.MappingProfiles

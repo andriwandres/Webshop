@@ -1,4 +1,26 @@
 :host {
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: row;
+  justify-content: center;
+  background-color: #ddd;
+  flex-grow: 1;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  padding: 0 20px;
+  width: 800px;
+
+  #checkout-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-top: 20px;
+  }
+
+  #back-button {
+    display: flex;
+  }
 }

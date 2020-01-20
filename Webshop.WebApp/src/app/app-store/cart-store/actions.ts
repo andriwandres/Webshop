@@ -13,6 +13,8 @@ export enum ActionTypes {
   REMOVE_CART_ITEM = '[Cart] Remove Cart Item',
   REMOVE_CART_ITEM_SUCCESS = '[Cart] Remove Cart Item Success',
   REMOVE_CART_ITEM_FAILURE = '[Cart] Remove Cart Item Failure',
+
+  CLEAR_CART = '[Cart] Clear Cart'
 }
 
 export const getCart = createAction(ActionTypes.GET_CART);
@@ -27,6 +29,8 @@ export const removeCartItem = createAction(ActionTypes.REMOVE_CART_ITEM, props<{
 export const removeCartItemSuccess = createAction(ActionTypes.REMOVE_CART_ITEM_SUCCESS, props<{ cartItemId: number }>());
 export const removeCartItemFailure = createAction(ActionTypes.REMOVE_CART_ITEM_FAILURE, props<{ error: any }>());
 
+export const clearCart = createAction(ActionTypes.CLEAR_CART);
+
 const allActions = union({
   getCart,
   getCartSuccess,
@@ -37,6 +41,7 @@ const allActions = union({
   removeCartItem,
   removeCartItemSuccess,
   removeCartItemFailure,
+  clearCart,
 });
 
 export type CartActionUnion = typeof allActions;

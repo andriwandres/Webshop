@@ -1,0 +1,15 @@
+<div id="container">
+  <button mat-button id="back-button" routerLink="/products">
+    <mat-icon>arrow_back</mat-icon>
+    <span>Back</span>
+  </button>
+
+  <div id="checkout-form">
+    <app-checkout-cart></app-checkout-cart>
+
+    <app-payment-method
+      [paymentMethods]="paymentMethods$ | async"
+      (checkout)="onCheckout($event)">
+    </app-payment-method>
+  </div>
+</div>

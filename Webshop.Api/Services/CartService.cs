@@ -52,6 +52,7 @@ namespace Webshop.Api.Services
             {
                 User = user,
                 Product = product,
+                Quantity = 1,
             };
 
             await _context.CartItems.AddAsync(item, cancellationToken);

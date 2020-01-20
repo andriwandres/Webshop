@@ -56,20 +56,17 @@ namespace Webshop.Api.Services
                 .Include(ci => ci.Product)
                 .ThenInclude(p => p.Images)
                 .Where(ci => ci.UserId == user.UserId);
-           
-            IQueryable<Order> orders = cart.ProjectTo<Order>(_mapper.ConfigurationProvider);
+
+            IEnumerable<Order> orders = await cart
+                .ProjectTo<Order>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
 
             PaymentMethod paymentMethod = await _context.PaymentMethods
                 .SingleOrDefaultAsync(pm => pm.PaymentMethodId == model.PaymentMethodId, cancellationToken);
 
             foreach (Order order in orders)
             {
-                order.PaymentMethod = paymentMethod;
-            }
-
-            foreach (CartItem cartItem in cart)
-            {
-                cartItem.Product.Quantity -= cartItem.Quantity;
+                order.PaymentMethodId = paymentMethod.PaymentMethodId;
             }
 
             await _context.Orders.AddRangeAsync(orders, cancellationToken);
@@ -78,9 +75,10 @@ namespace Webshop.Api.Services
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            IEnumerable<OrderViewModel> viewModels = await orders
+            IEnumerable<OrderViewModel> viewModels = orders
+                .AsQueryable()
                 .ProjectTo<OrderViewModel>(_mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
+                .ToList();
 
             return viewModels;
         }

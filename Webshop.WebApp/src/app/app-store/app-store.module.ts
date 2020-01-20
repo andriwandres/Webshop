@@ -8,6 +8,7 @@ import { CartStoreModule } from './cart-store';
 import { ProductsStoreModule } from './products-store';
 import { ReviewStoreModule } from './review-store';
 import { WishlistStoreModule } from './wishlist-store';
+import { PaymentMethodStoreModule } from './payment-method-store';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { WishlistStoreModule } from './wishlist-store';
     ProductsStoreModule,
     WishlistStoreModule,
     ReviewStoreModule,
+    PaymentMethodStoreModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({

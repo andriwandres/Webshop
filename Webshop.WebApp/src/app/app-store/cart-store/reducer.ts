@@ -72,6 +72,13 @@ const reducer = createReducer(
       isLoading: false,
       error,
     };
+  }),
+
+  // Clear Cart
+  on(cartActions.clearCart, (state) => {
+    return cartAdapter.removeAll({
+      ...state,
+    });
   })
 );
 

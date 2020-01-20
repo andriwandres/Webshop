@@ -83,7 +83,7 @@
                 Checks out the users cart and places orders accordingly
             </summary>
             <param name="model">
-                Information for Order to be placed
+                Payment method information
             </param>
             <param name="cancellationToken">
                 Token for cancelling the request. This token is provided by the framework itself
@@ -95,10 +95,7 @@
                 Returns the created order
             </response>
             <response code="400">
-                If validation fails or order quantity exceeds stock quantity
-            </response>
-            <response code="404">
-                If given product doesn't exist
+                If validation fails
             </response>
         </member>
         <member name="M:Webshop.Api.Controllers.ProductController.GetProducts(Webshop.Api.Models.Dto.Product.ProductQueryDto,System.Threading.CancellationToken)">

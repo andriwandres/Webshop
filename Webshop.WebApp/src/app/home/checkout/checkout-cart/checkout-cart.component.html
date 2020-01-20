@@ -1,1 +1,18 @@
-<p>checkout-cart works!</p>
+<span id="title">My Cart</span>
+
+
+<ng-container *ngIf="cartItems$ | async as cartItems">
+  <app-checkout-cart-item
+    *ngFor="let cartItem of cartItems"
+    [cartItem]="cartItem"
+    (removeItem)="onRemove(cartItem.cartItemId)">
+  </app-checkout-cart-item>
+</ng-container>
+
+<mat-divider id="total-divider"></mat-divider>
+
+<div id="total-price" *ngIf="totalPrice$ | async as totalPrice">
+  <span id="total-price-label">Total</span>
+  <span id="total-price-value">{{ totalPrice | currency : 'CHF ' }}</span>
+</div>
+

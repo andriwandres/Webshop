@@ -1,0 +1,45 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+#title {
+  font-size: 20px;
+  color: #555555;
+}
+
+#method-listing {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 20px;
+
+  .payment-method {
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 20px;
+    min-width: 50px;
+    margin: 0 10px;
+    display: flex;
+    justify-content: center;
+
+    &:hover, &.active {
+      background-color: #C4D2DF;
+    }
+  }
+}
+
+#checkout-button {
+  background-color: #4B71BB;
+  color: white;
+  margin-top: 40px;
+
+  &.disabled {
+    background-color: rgba(0,0,0,.12);
+    color: black;
+  }
+
+  &:not(.disabled):hover {
+    background-color: lighten(#4B71BB, 5%);
+  }
+}

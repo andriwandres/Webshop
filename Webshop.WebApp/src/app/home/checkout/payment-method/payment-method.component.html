@@ -1,1 +1,20 @@
-<p>payment-method works!</p>
+<span id="title">Payment Method</span>
+
+<div id="method-listing">
+  <div
+    class="payment-method"
+    *ngFor="let method of paymentMethods"
+    (click)="selectMethod(method.paymentMethodId)"
+    [ngClass]="{ active: paymentMethodId.value === method.paymentMethodId }">
+    {{ method.name }}
+  </div>
+</div>
+
+<button
+  id="checkout-button"
+  mat-raised-button
+  [disabled]="paymentMethodId.invalid"
+  [ngClass]="{ disabled: paymentMethodId.invalid }"
+  (click)="submit()">
+  Checkout
+</button>

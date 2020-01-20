@@ -4,6 +4,9 @@ import { CheckoutRoutingModule } from './checkout-routing.module';
 import { CheckoutComponent } from './checkout.component';
 import { CheckoutCartModule } from './checkout-cart/checkout-cart.module';
 import { PaymentMethodModule } from './payment-method/payment-method.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [CheckoutComponent],
@@ -12,6 +15,9 @@ import { PaymentMethodModule } from './payment-method/payment-method.module';
     CheckoutRoutingModule,
     CheckoutCartModule,
     PaymentMethodModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSnackBarModule,
   ],
   exports: [CheckoutComponent]
 })

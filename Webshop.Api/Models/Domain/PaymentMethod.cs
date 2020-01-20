@@ -5,6 +5,11 @@ namespace Webshop.Api.Models.Domain
 {
     public class PaymentMethod
     {
+        public PaymentMethod()
+        {
+            Orders = new HashSet<Order>();
+        }
+
         [Key]
         public int PaymentMethodId { get; set; }
 

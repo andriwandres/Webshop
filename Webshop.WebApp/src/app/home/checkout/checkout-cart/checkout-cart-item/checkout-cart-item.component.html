@@ -1,0 +1,10 @@
+<div id="image"></div>
+
+<div id="text-row">
+  <a id="title"> {{ cartItem.productTitle }} </a>
+  <span id="price"> {{ cartItem.price | currency : 'CHF ' }} </span>
+</div>
+
+<button mat-icon-button (click)="removeItem.emit(cartItem.cartItemId)">
+  <mat-icon>close</mat-icon>
+</button>

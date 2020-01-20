@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { PaymentMethodEffects } from './effects';
+import { paymentMethodReducer } from './reducer';
+import { paymentMethodFeatureKey } from './selectors';
 
 @NgModule({
-  declarations: [],
   imports: [
-    CommonModule
-  ]
+    StoreModule.forFeature(paymentMethodFeatureKey, paymentMethodReducer),
+    EffectsModule.forFeature([PaymentMethodEffects]),
+  ],
+  providers: [PaymentMethodEffects]
 })
 export class PaymentMethodStoreModule { }

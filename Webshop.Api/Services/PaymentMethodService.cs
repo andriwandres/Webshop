@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Webshop.Api.Database;
+using Webshop.Api.Models.Domain;
 using Webshop.Api.Models.ViewModel.PaymentMethod;
 
 namespace Webshop.Api.Services
@@ -23,6 +24,7 @@ namespace Webshop.Api.Services
         public async Task<IEnumerable<PaymentMethodViewModel>> GetPaymentMethods(CancellationToken cancellationToken = default)
         {
             IEnumerable<PaymentMethodViewModel> paymentMethods = await _context.PaymentMethods
+                .AsNoTracking()
                 .ProjectTo<PaymentMethodViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 

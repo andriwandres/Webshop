@@ -9,5 +9,5 @@
   </app-cart-item>
 
   <p id="no-items-text" *ngIf="(itemsCount$ | async) === 0">There are no products in your cart</p>
-  <a id="checkout-button" *ngIf="(itemsCount$ | async) >= 1">Checkout</a>
+  <a id="checkout-button" *ngIf="(itemsCount$ | async) >= 1" routerLink="/checkout">Checkout</a>
 </mat-menu>

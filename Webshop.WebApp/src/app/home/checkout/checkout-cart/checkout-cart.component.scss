@@ -1,0 +1,28 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+#title {
+  font-size: 20px;
+  color: #555555;
+}
+
+#total-divider {
+  margin: 20px 0;
+}
+
+#total-price {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 20px;
+
+  #total-price-label {
+    color: black;
+  }
+
+  #total-price-value {
+    color: red;
+  }
+}
