@@ -23,6 +23,15 @@ namespace Webshop.Api.Controllers
             _authService = authService;
         }
 
+        /// <summary>
+        ///     Authenticates the user by his provided token and returns user information with it
+        /// </summary>
+        /// <param name="cancellationToken">
+        ///     Token for cancelling the request. This token is provided by the framework itself
+        /// </param>
+        /// <returns>
+        ///     User information alongside the users token
+        /// </returns>
         [Authorize]
         [HttpGet("Authenticate")]
         [ProducesResponseType(StatusCodes.Status200OK)]

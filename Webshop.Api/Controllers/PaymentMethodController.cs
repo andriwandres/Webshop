@@ -20,6 +20,15 @@ namespace Webshop.Api.Controllers
             _paymentMethodService = paymentMethodService;
         }
 
+        /// <summary>
+        ///     Gets a list of available payment methods
+        /// </summary>
+        /// <param name="cancellationToken">
+        ///     Token for cancelling the request. This token is provided by the framework itself
+        /// </param>
+        /// <returns>
+        ///     List of available payment methods
+        /// </returns>
         [Authorize]
         [HttpGet("GetPaymentMethods")]
         [ProducesResponseType(StatusCodes.Status200OK)]

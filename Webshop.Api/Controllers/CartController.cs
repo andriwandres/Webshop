@@ -23,6 +23,15 @@ namespace Webshop.Api.Controllers
             _productService = productService;
         }
 
+        /// <summary>
+        ///     Gets a list of cart items of the current user
+        /// </summary>
+        /// <param name="cancellationToken">
+        ///     Token for cancelling the request. This token is provided by the framework itself
+        /// </param>
+        /// <returns>
+        ///     List of cart items
+        /// </returns>
         [Authorize]
         [HttpGet("GetCart")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -33,6 +42,18 @@ namespace Webshop.Api.Controllers
             return Ok(cartItems);
         }
 
+        /// <summary>
+        ///     Adds a product to the users cart
+        /// </summary>
+        /// <param name="productId">
+        ///     Product to be placed in the users cart
+        /// </param>
+        /// <param name="cancellationToken">
+        ///     Token for cancelling the request. This token is provided by the framework itself
+        /// </param>
+        /// <returns>
+        ///     Product that has been placed in the users cart
+        /// </returns>
         [Authorize]
         [HttpPost("AddCartItem/{productId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -64,6 +85,18 @@ namespace Webshop.Api.Controllers
             return Ok(cartItem);
         }
 
+        /// <summary>
+        ///     Removes an existing product from the users cart
+        /// </summary>
+        /// <param name="id">
+        ///     ID number of cart item to remove
+        /// </param>
+        /// <param name="cancellationToken">
+        ///     Token for cancelling the request. This token is provided by the framework itself
+        /// </param>
+        /// <returns>
+        ///     ID number of cart item that has been removed
+        /// </returns>
         [Authorize]
         [HttpDelete("RemoveCartItem/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

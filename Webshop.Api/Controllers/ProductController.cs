@@ -102,21 +102,5 @@ namespace Webshop.Api.Controllers
 
             return Ok(product);
         }
-
-        [HttpPost("Upload")]
-        [AllowAnonymous]
-        public async Task<ActionResult> Upload(IFormFile file)
-        {
-            using(var stream = new MemoryStream())
-            {
-                await file.CopyToAsync(stream);
-                byte[] bytes = stream.ToArray();
-                string base64 = Convert.ToBase64String(bytes);
-
-                await _productService.Upload(base64);
-            }
-
-            return NoContent();
-        }
     }
 }

@@ -30,7 +30,7 @@ export class AuthService {
   }
 
   checkEmailTaken(email: string): Observable<boolean> {
-    const url = `${environment.api.auth}/Register`;
+    const url = `${environment.api.auth}/IsEmailTaken`;
     const options = {
       params: new HttpParams().set('email', email)
     };
